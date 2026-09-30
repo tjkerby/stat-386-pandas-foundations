@@ -18,6 +18,8 @@ stat-386-pandas-foundations/
 │   └── pandas-foundations-complete.qmd
 ├── data/
 │   └── talks.csv
+├── docs/
+│   └── rendered website published by GitHub Pages
 ├── slides/
 │   ├── pandas-foundations.qmd
 │   └── theme.scss
@@ -27,6 +29,7 @@ stat-386-pandas-foundations/
 ├── .python-version
 ├── _quarto.yml
 ├── INSTRUCTOR_GUIDE.md
+├── index.qmd
 ├── pyproject.toml
 └── README.md
 ```
@@ -77,19 +80,32 @@ uv run python src/pandas_demo.py
 The script prints the two main ordered results and checks their shapes and
 filtering conditions.
 
-## Rendering the Quarto materials
+## Rendering the Quarto website
 
-Quarto must be installed separately. Once Quarto is available, run:
+The repository is a Quarto website project. Quarto must be installed
+separately. Render the whole site into `docs/`:
 
 ```bash
-quarto preview slides/pandas-foundations.qmd
+quarto render
 ```
 
-To render either activity:
+Quarto automatically uses the project `.venv` created by `uv sync` to execute
+the activity code cells. To preview while editing:
 
 ```bash
-quarto render activity/pandas-foundations.qmd
-quarto render activity/pandas-foundations-complete.qmd
+quarto preview
+```
+
+## Publishing to GitHub Pages
+
+GitHub Pages serves the site from the `docs/` folder on the default branch.
+After editing the materials, re-render and push:
+
+```bash
+quarto render
+git add docs
+git commit -m "Render site"
+git push
 ```
 
 ## Instructor guidance

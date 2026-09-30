@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.26">
+
+  <meta name="author" content="STAT 386">
+  <meta name="dcterms.date" content="2026-09-30">
+  <title>STAT 386: pandas Foundations – pandas</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-2afb47ebe53cd7fa4e52842c00301673.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">pandas</h1>
+  <p class="subtitle">Thinking in labeled tables</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+STAT 386 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-09-30</p>
+</section>
+<section id="a-request-about-794-talks" class="slide level2">
+<h2>A request about 794 talks</h2>
+<p>You receive a table with 794 General Conference talks and 14 variables.</p>
+<blockquote>
+<p>Find the five talks from 2018 through 2020 with the largest word counts. Show the title, speaker, conference, and word count.</p>
+</blockquote>
+<div class="question">
+<p>What must your code do before you can answer?</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Read the request without showing code. Ask students to name the decisions hidden inside it. Listen for understanding rows and columns, filtering years, choosing columns, sorting, and keeping five rows.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="think-pair-share" class="slide level2">
+<h2>Think, pair, share</h2>
+<div class="operation-list">
+<ol type="1">
+<li class="fragment">What does one row need to represent?</li>
+<li class="fragment">Which variables matter for the request?</li>
+<li class="fragment">Which observations qualify?</li>
+<li class="fragment">How should the qualifying rows be ordered?</li>
+<li class="fragment">What would you check before reporting the answer?</li>
+</ol>
+</div>
+<aside class="notes">
+<p>Planned time: 4 minutes.</p>
+<p>Give students about 45 seconds to think and 90 seconds to compare. During the share, collect one answer for each question. Keep the discussion at the level of table operations rather than pandas syntax.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-data-question-becomes-table-operations" class="slide level2">
+<h2>A data question becomes table operations</h2>
+<ul>
+<li class="fragment"><strong>Understand:</strong> identify the observational unit and variables.</li>
+<li class="fragment"><strong>Select:</strong> keep the columns needed for the answer.</li>
+<li class="fragment"><strong>Filter:</strong> keep the rows that satisfy the conditions.</li>
+<li class="fragment"><strong>Order:</strong> arrange the rows so the requested cases come first.</li>
+<li class="fragment"><strong>Check:</strong> confirm the shape and meaning of the result.</li>
+</ul>
+<div class="fragment takeaway">
+<p>pandas gives these operations a vocabulary.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Use this as the debrief for the discussion. The five verbs organize the rest of the lecture. Point out that the order of selecting and filtering can vary, but every operation should serve the question.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="todays-problem" class="slide level2">
+<h2>Today’s problem</h2>
+<blockquote>
+<p>How can we translate a question about tabular data into explicit operations on labeled rows and columns?</p>
+</blockquote>
+<p>By the end of class, you should be able to reason about:</p>
+<ul>
+<li class="fragment">Series and DataFrames</li>
+<li class="fragment">labels, positions, and alignment</li>
+<li class="fragment">selecting and filtering observations</li>
+<li class="fragment">sorting by one or more variables</li>
+<li class="fragment">vectorized variables and simple summaries</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>This is the roadmap. Tell students that the opening request will return in the repository activity.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-numpy-array-from-last-class" class="slide level2">
+<h2>The NumPy array from last class</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>scores <span class="op">=</span> np.array([</span>
+<span id="cb1-2"><a></a>    [<span class="dv">82</span>, <span class="dv">91</span>, <span class="dv">88</span>],</span>
+<span id="cb1-3"><a></a>    [<span class="dv">75</span>, <span class="dv">84</span>, <span class="dv">79</span>],</span>
+<span id="cb1-4"><a></a>    [<span class="dv">93</span>, <span class="dv">89</span>, <span class="dv">95</span>],</span>
+<span id="cb1-5"><a></a>    [<span class="dv">68</span>, <span class="dv">72</span>, <span class="dv">74</span>]</span>
+<span id="cb1-6"><a></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">Shape tells us there are four rows and three columns.</li>
+<li class="fragment">Position tells us where each value lives.</li>
+<li class="fragment">We must remember what each row and column means.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>This should feel completely familiar. Ask what one row and one column represent before advancing.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-same-values-with-labels" class="slide level2">
+<h2>The same values with labels</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>score_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb2-2"><a></a>    scores,</span>
+<span id="cb2-3"><a></a>    index<span class="op">=</span>[<span class="st">"Ana"</span>, <span class="st">"Bo"</span>, <span class="st">"Cam"</span>, <span class="st">"Dev"</span>],</span>
+<span id="cb2-4"><a></a>    columns<span class="op">=</span>[<span class="st">"exam_1"</span>, <span class="st">"exam_2"</span>, <span class="st">"exam_3"</span>]</span>
+<span id="cb2-5"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="score-table">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">student</th>
+<th style="text-align: right;">exam_1</th>
+<th style="text-align: right;">exam_2</th>
+<th style="text-align: right;">exam_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ana</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">88</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bo</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cam</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dev</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">74</td>
+</tr>
+</tbody>
+</table>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The values have not changed. The table now carries names for both axes. Explain that the leftmost student labels form the index and the exam names label columns.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="what-pandas-adds" class="slide level2">
+<h2>What pandas adds</h2>
+<ul>
+<li class="fragment">Row and column labels carry meaning into the code.</li>
+<li class="fragment">Each column can have its own data type.</li>
+<li class="fragment">Labels support selection and automatic alignment.</li>
+<li class="fragment">Table methods express common data tasks directly.</li>
+</ul>
+<div class="fragment takeaway">
+<p>Shape, vectorization, and Boolean masks still matter.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Keep the NumPy connection strong without claiming that every modern pandas column must use an ordinary NumPy array internally. pandas can use additional storage types.</p>
+<p>Source: https://pandas.pydata.org/docs/user_guide/dsintro.html</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="two-core-objects" class="slide level2">
+<h2>Two core objects</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<h3 id="series">Series</h3>
+<p>One labeled sequence of values</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>score_df[<span class="st">"exam_1"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><span class="series-label">One dimension</span></p>
+</div><div class="column" style="width:47%;">
+<h3 id="dataframe">DataFrame</h3>
+<p>Labeled rows and columns</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>score_df[[<span class="st">"exam_1"</span>, <span class="st">"exam_3"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><span class="dataframe-label">Two dimensions</span></p>
+</div></div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Describe a DataFrame as a collection of aligned Series. The single bracket and double bracket distinction will return later with visible results.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="labels-participate-in-computation" class="slide level2">
+<h2>Labels participate in computation</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>first_exam <span class="op">=</span> pd.Series(</span>
+<span id="cb5-2"><a></a>    [<span class="dv">82</span>, <span class="dv">75</span>], index<span class="op">=</span>[<span class="st">"Ana"</span>, <span class="st">"Bo"</span>]</span>
+<span id="cb5-3"><a></a>)</span>
+<span id="cb5-4"><a></a></span>
+<span id="cb5-5"><a></a>bonus <span class="op">=</span> pd.Series(</span>
+<span id="cb5-6"><a></a>    [<span class="dv">5</span>, <span class="dv">2</span>], index<span class="op">=</span>[<span class="st">"Bo"</span>, <span class="st">"Ana"</span>]</span>
+<span id="cb5-7"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="question">
+<p>What should <code>first_exam + bonus</code> return?</p>
+</div>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>Ask students to predict before revealing the result. NumPy-style positional addition would suggest 87 and 77. pandas uses the labels.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="pandas-aligns-matching-labels" class="slide level2">
+<h2>pandas aligns matching labels</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>first_exam <span class="op">+</span> bonus</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a></a>Ana    84</span>
+<span id="cb7-2"><a></a>Bo     80</span>
+<span id="cb7-3"><a></a>dtype: int64</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment takeaway">
+<p>Ana receives Ana’s bonus even though the Series use different orders.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Read the calculation for each student. Label alignment prevents values from silently changing meaning when their order differs. Mention that missing labels introduce missing results, but leave missingness for its dedicated lesson.</p>
+<p>Source: https://pandas.pydata.org/docs/user_guide/dsintro.html</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-bridge-from-numpy" class="slide level2">
+<h2>The bridge from NumPy</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">NumPy idea</th>
+<th style="text-align: left;">pandas continuation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">shape and axes</td>
+<td style="text-align: left;">rows and columns with labels</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">one array <code>dtype</code></td>
+<td style="text-align: left;">one <code>dtype</code> per Series</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">positional indexing</td>
+<td style="text-align: left;">label and position indexing</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Boolean arrays</td>
+<td style="text-align: left;">aligned Boolean Series</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">vectorized operations</td>
+<td style="text-align: left;">column expressions</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>This is the conceptual summary of the bridge. Avoid spending time converting repeatedly between NumPy and pandas.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meet-the-talks-table" class="slide level2">
+<h2>Meet the talks table</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a></a></span>
+<span id="cb8-3"><a></a>talks <span class="op">=</span> pd.read_csv(<span class="st">"data/talks.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">794 rows</li>
+<li class="fragment">14 columns</li>
+<li class="fragment">Conferences from 2010 through 2020</li>
+</ul>
+<div class="question">
+<p>What should one row represent?</p>
+</div>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>Loading is setup rather than the focus today. Students will examine file interpretation more deeply in the importing and loading lesson.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-observational-unit" class="slide level2">
+<h2>The observational unit</h2>
+<div class="takeaway">
+<p>Each row represents one General Conference talk.</p>
+</div>
+<p>Columns describe that talk, including:</p>
+<ul>
+<li class="fragment">its title and speaker</li>
+<li class="fragment">its conference and session</li>
+<li class="fragment">its word count and runtime</li>
+<li class="fragment">its source link and short summary</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Ask how the analysis would change if one row represented a speaker or a conference instead. The row definition constrains what each operation means.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="inspect-before-analyzing" class="slide level2">
+<h2>Inspect before analyzing</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>talks.head()</span>
+<span id="cb9-2"><a></a>talks.shape</span>
+<span id="cb9-3"><a></a>talks.columns</span>
+<span id="cb9-4"><a></a>talks.dtypes</span>
+<span id="cb9-5"><a></a>talks.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">Do the rows match the expected observational unit?</li>
+<li class="fragment">Did the expected columns arrive?</li>
+<li class="fragment">Do the data types match the variables’ meanings?</li>
+<li class="fragment">Does the size seem plausible?</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Present these as evidence checks rather than a memorized inspection ritual. Ask what each command can reveal and what it cannot reveal.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-readable-first-look" class="slide level2 smaller">
+<h2>A readable first look</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>talks[[</span>
+<span id="cb10-2"><a></a>    <span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"conference"</span>, <span class="st">"num_words"</span></span>
+<span id="cb10-3"><a></a>]].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">talk_name</th>
+<th style="text-align: left;">speaker</th>
+<th style="text-align: left;">conference</th>
+<th style="text-align: right;">num_words</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Finding Joy in Christ</td>
+<td style="text-align: left;">Steven J. Lund</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">1514</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Culture of Christ</td>
+<td style="text-align: left;">William K. Jackson</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">1500</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Let Patience Have Her Perfect Work, and Count It All Joy!</td>
+<td style="text-align: left;">Jeremy R. Jaggi</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">1492</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ask, Seek, and Knock</td>
+<td style="text-align: left;">Milton Camargo</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">1484</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Enduring Power</td>
+<td style="text-align: left;">Kelly R. Johnson</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">1430</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The full DataFrame is too wide for a useful display. Selecting a few meaningful columns is part of inspection, not manipulation for its own sake.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="shape-has-a-substantive-meaning" class="slide level2">
+<h2>Shape has a substantive meaning</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>talks.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a></a>(794, 14)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li class="fragment">794 observed talks</li>
+<li class="fragment">14 recorded variables for each talk</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>Connect this directly to the NumPy shape lesson. Students should state the substantive meaning before treating shape as a tuple to memorize.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="data-types-belong-to-columns" class="slide level2">
+<h2>Data types belong to columns</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>talks[[<span class="st">"talk_name"</span>, <span class="st">"year"</span>, <span class="st">"num_words"</span>]].dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a></a>talk_name       object</span>
+<span id="cb14-2"><a></a>year             int64</span>
+<span id="cb14-3"><a></a>num_words        int64</span>
+<span id="cb14-4"><a></a>dtype: object</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="question">
+<p>Which calculations make sense for each column?</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The word <code>object</code> is what this dataset reports for text under its current import settings. Do not generalize that all pandas text columns must always use <code>object</code>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="selecting-one-column" class="slide level2">
+<h2>Selecting one column</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>word_counts <span class="op">=</span> talks[<span class="st">"num_words"</span>]</span>
+<span id="cb15-2"><a></a></span>
+<span id="cb15-3"><a></a><span class="bu">type</span>(word_counts)</span>
+<span id="cb15-4"><a></a>word_counts.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a></a>pandas.Series</span>
+<span id="cb16-2"><a></a>(794,)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>A single column label returns a Series. Connect the one-dimensional shape to the prior NumPy indexing discussion.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="selecting-columns-as-a-dataframe" class="slide level2">
+<h2>Selecting columns as a DataFrame</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>small_talks <span class="op">=</span> talks[[</span>
+<span id="cb17-2"><a></a>    <span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"num_words"</span></span>
+<span id="cb17-3"><a></a>]]</span>
+<span id="cb17-4"><a></a></span>
+<span id="cb17-5"><a></a><span class="bu">type</span>(small_talks)</span>
+<span id="cb17-6"><a></a>small_talks.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a></a>pandas.DataFrame</span>
+<span id="cb18-2"><a></a>(794, 3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>The outer brackets perform the DataFrame selection. The inner brackets create a Python list of column labels.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="single-and-double-brackets" class="slide level2">
+<h2>Single and double brackets</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<h3 id="series-result">Series result</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>talks[<span class="st">"num_words"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Shape: <code>(794,)</code></p>
+</div><div class="column" style="width:47%;">
+<h3 id="dataframe-result">DataFrame result</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>talks[[<span class="st">"num_words"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Shape: <code>(794, 1)</code></p>
+</div></div>
+<div class="takeaway">
+<p>The values can match while the object structure differs.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Ask why the DataFrame version could be useful. It preserves a two-dimensional table and makes it easy to add more selected columns.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="labels-and-positions" class="slide level2">
+<h2>Labels and positions</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>df.loc[row_labels, column_labels]</span>
+<span id="cb21-2"><a></a>df.iloc[row_positions, column_positions]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Selector</th>
+<th style="text-align: left;">Interprets <code>1</code> as</th>
+<th style="text-align: left;">Best when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>.loc[]</code></td>
+<td style="text-align: left;">an index label</td>
+<td style="text-align: left;">meaning and conditions matter</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>.iloc[]</code></td>
+<td style="text-align: left;">the second position</td>
+<td style="text-align: left;">physical position matters</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Say <code>loc</code> as label location and <code>iloc</code> as integer location. A numeric index label can make the distinction less visible, which is why the score table uses names.</p>
+<p>Source: https://pandas.pydata.org/docs/user_guide/indexing.html</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="one-selection-in-two-languages" class="slide level2">
+<h2>One selection in two languages</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>score_df.loc[</span>
+<span id="cb22-2"><a></a>    [<span class="st">"Bo"</span>, <span class="st">"Cam"</span>],</span>
+<span id="cb22-3"><a></a>    [<span class="st">"exam_1"</span>, <span class="st">"exam_3"</span>]</span>
+<span id="cb22-4"><a></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>score_df.iloc[</span>
+<span id="cb23-2"><a></a>    [<span class="dv">1</span>, <span class="dv">2</span>],</span>
+<span id="cb23-3"><a></a>    [<span class="dv">0</span>, <span class="dv">2</span>]</span>
+<span id="cb23-4"><a></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment score-table">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">student</th>
+<th style="text-align: right;">exam_1</th>
+<th style="text-align: right;">exam_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bo</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cam</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">95</td>
+</tr>
+</tbody>
+</table>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The two expressions return the same values for the current table. Ask which expression would remain meaningful if the row order changed. The label-based selection is more closely tied to the substantive request.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="predict-the-result" class="slide level2">
+<h2>Predict the result</h2>
+<p>Starting from the four-row score DataFrame, predict the object type, shape, and contents of:</p>
+<ol type="1">
+<li class="fragment"><code>score_df["exam_1"]</code></li>
+<li class="fragment"><code>score_df[["exam_1"]]</code></li>
+<li class="fragment"><code>score_df.loc[["Ana", "Cam"], ["exam_2"]]</code></li>
+<li class="fragment"><code>score_df.iloc[:2, 1:]</code></li>
+</ol>
+<aside class="notes">
+<p>Planned time: 4 minutes.</p>
+<p>Give students one minute individually and one minute with a partner. Ask pairs to justify the dimensions rather than only state the values. The expected shapes are <code>(4,)</code>, <code>(4, 1)</code>, <code>(2, 1)</code>, and <code>(2, 2)</code>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="selection-preserves-intended-structure" class="slide level2">
+<h2>Selection preserves intended structure</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>score_df["exam_1"]</code></td>
+<td style="text-align: left;">Series</td>
+<td style="text-align: left;"><code>(4,)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>score_df[["exam_1"]]</code></td>
+<td style="text-align: left;">DataFrame</td>
+<td style="text-align: left;"><code>(4, 1)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>.loc[["Ana", "Cam"], ["exam_2"]]</code></td>
+<td style="text-align: left;">DataFrame</td>
+<td style="text-align: left;"><code>(2, 1)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>.iloc[:2, 1:]</code></td>
+<td style="text-align: left;">DataFrame</td>
+<td style="text-align: left;"><code>(2, 2)</code></td>
+</tr>
+</tbody>
+</table>
+<div class="takeaway">
+<p>Ask what dimensions your selectors preserve or remove.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Use this as the immediate debrief. The goal is to make object shape predictable rather than mysterious.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-comparison-creates-a-boolean-series" class="slide level2">
+<h2>A comparison creates a Boolean Series</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>recent_mask <span class="op">=</span> talks[<span class="st">"year"</span>].between(<span class="dv">2018</span>, <span class="dv">2020</span>)</span>
+<span id="cb24-2"><a></a></span>
+<span id="cb24-3"><a></a>recent_mask.shape</span>
+<span id="cb24-4"><a></a>recent_mask.<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment output">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb25-1"><a></a>(794,)</span>
+<span id="cb25-2"><a></a>201</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The mask makes one decision per talk. Ask what <code>True</code> means in context. The sum counts <code>True</code> values because Boolean values behave as one and zero in this reduction.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="read-the-mask-beside-the-data" class="slide level2">
+<h2>Read the mask beside the data</h2>
+<div class="mask-table">
+<table class="caption-top">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: left;">condition</th>
+<th style="text-align: center;">keep?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: left;"><code>2018 &lt;= 2020 &lt;= 2020</code></td>
+<td style="text-align: center;"><span class="mask-true">True</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2019</td>
+<td style="text-align: left;"><code>2018 &lt;= 2019 &lt;= 2020</code></td>
+<td style="text-align: center;"><span class="mask-true">True</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: left;"><code>2018 &lt;= 2017 &lt;= 2020</code></td>
+<td style="text-align: center;"><span class="mask-false">False</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2018</td>
+<td style="text-align: left;"><code>2018 &lt;= 2018 &lt;= 2020</code></td>
+<td style="text-align: center;"><span class="mask-true">True</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2016</td>
+<td style="text-align: left;"><code>2018 &lt;= 2016 &lt;= 2020</code></td>
+<td style="text-align: center;"><span class="mask-false">False</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="takeaway">
+<p>Filtering begins by making one explicit decision for each row.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Trace each row before showing selection syntax. This repeats the visible kept-versus-dropped approach from the NumPy slides.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="apply-the-mask-with-.loc" class="slide level2">
+<h2>Apply the mask with <code>.loc[]</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>recent_talks <span class="op">=</span> talks.loc[</span>
+<span id="cb26-2"><a></a>    recent_mask,</span>
+<span id="cb26-3"><a></a>    [<span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"conference"</span>, <span class="st">"year"</span>, <span class="st">"num_words"</span>]</span>
+<span id="cb26-4"><a></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">The expression before the comma selects rows.</li>
+<li class="fragment">The list after the comma selects columns.</li>
+<li class="fragment">The result has 201 rows and 5 columns.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Read the expression aloud as keep rows where the recent mask is true, then keep these five labeled columns. This makes the two-axis structure explicit.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="combining-conditions" class="slide level2">
+<h2>Combining conditions</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>mask <span class="op">=</span> (</span>
+<span id="cb27-2"><a></a>    talks[<span class="st">"year"</span>].between(<span class="dv">2019</span>, <span class="dv">2020</span>)</span>
+<span id="cb27-3"><a></a>    <span class="op">&amp;</span> (talks[<span class="st">"session"</span>] <span class="op">==</span> <span class="st">"sunday-morning"</span>)</span>
+<span id="cb27-4"><a></a>    <span class="op">&amp;</span> talks[<span class="st">"num_words"</span>].between(<span class="dv">1400</span>, <span class="dv">1700</span>)</span>
+<span id="cb27-5"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment"><code>&amp;</code> means elementwise AND.</li>
+<li class="fragment"><code>|</code> means elementwise OR.</li>
+<li class="fragment"><code>~</code> reverses a Boolean condition.</li>
+<li class="fragment">Parentheses make each comparison explicit.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 3 minutes.</p>
+<p>Explain why ordinary Python <code>and</code>, <code>or</code>, and <code>not</code> do not make one decision per row. Do not dwell on operator precedence rules. Teach parentheses as the readable standard.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="helpers-express-common-conditions" class="slide level2">
+<h2>Helpers express common conditions</h2>
+<div class="columns">
+<div class="column" style="width:47%;">
+<h3 id="inclusive-range">Inclusive range</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>talks[<span class="st">"year"</span>].between(<span class="dv">2018</span>, <span class="dv">2020</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column" style="width:47%;">
+<h3 id="set-membership">Set membership</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>talks[<span class="st">"session"</span>].isin([</span>
+<span id="cb29-2"><a></a>    <span class="st">"sunday-morning"</span>,</span>
+<span id="cb29-3"><a></a>    <span class="st">"sunday-afternoon"</span></span>
+<span id="cb29-4"><a></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Show the longer equivalent only verbally if useful. These helpers often express the data question more clearly than a long chain of repeated comparisons.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="three-filtering-mistakes" class="slide level2">
+<h2>Three filtering mistakes</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a><span class="co"># Python asks for one truth value</span></span>
+<span id="cb30-2"><a></a>condition_1 <span class="kw">and</span> condition_2</span>
+<span id="cb30-3"><a></a></span>
+<span id="cb30-4"><a></a><span class="co"># The comparisons need parentheses</span></span>
+<span id="cb30-5"><a></a>talks[<span class="st">"year"</span>] <span class="op">&gt;=</span> <span class="dv">2018</span> <span class="op">&amp;</span> talks[<span class="st">"year"</span>] <span class="op">&lt;=</span> <span class="dv">2020</span></span>
+<span id="cb30-6"><a></a></span>
+<span id="cb30-7"><a></a><span class="co"># This assignment targets a temporary result</span></span>
+<span id="cb30-8"><a></a>talks[talks[<span class="st">"year"</span>] <span class="op">&gt;=</span> <span class="dv">2018</span>][<span class="st">"recent"</span>] <span class="op">=</span> <span class="va">True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment takeaway">
+<p>Use vectorized operators, parenthesized comparisons, and one <code>.loc[]</code> assignment.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Do not ask students to memorize warning messages. Emphasize the reliable pattern. With pandas 3 Copy-on-Write, chained assignment never updates the original object.</p>
+<p>Sources:</p>
+<ul>
+<li>https://pandas.pydata.org/docs/user_guide/indexing.html</li>
+<li>https://pandas.pydata.org/docs/user_guide/copy_on_write.html</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="sorting-asks-a-separate-question" class="slide level2">
+<h2>Sorting asks a separate question</h2>
+<p>Filtering asks:</p>
+<blockquote>
+<p>Which rows qualify?</p>
+</blockquote>
+<p>Sorting asks:</p>
+<blockquote>
+<p>In what order should the qualifying rows appear?</p>
+</blockquote>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>recent_talks.sort_values(<span class="st">"num_words"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment takeaway">
+<p>Ascending order is the default.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Connect sorting to the opening request. The qualifying rows do not change. Only their displayed order changes.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="largest-values-first" class="slide level2">
+<h2>Largest values first</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a></a>longest_recent <span class="op">=</span> (</span>
+<span id="cb32-2"><a></a>    recent_talks</span>
+<span id="cb32-3"><a></a>    .sort_values(<span class="st">"num_words"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb32-4"><a></a>    .head(<span class="dv">5</span>)</span>
+<span id="cb32-5"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment"><code>ascending=False</code> places larger values first.</li>
+<li class="fragment"><code>head(5)</code> keeps the first five rows after sorting.</li>
+<li class="fragment"><code>sort_values()</code> returns a reordered DataFrame.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Ask what would happen if <code>head(5)</code> came before sorting. It would return the largest values only by accident. The sequence of operations carries meaning.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-five-longest-recent-talks" class="slide level2 smaller">
+<h2>The five longest recent talks</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">talk_name</th>
+<th style="text-align: left;">speaker</th>
+<th style="text-align: left;">conference</th>
+<th style="text-align: right;">num_words</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Hear Him</td>
+<td style="text-align: left;">Russell M. Nelson</td>
+<td style="text-align: left;">April 2020</td>
+<td style="text-align: right;">2591</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A Home Where the Spirit of the Lord Dwells</td>
+<td style="text-align: left;">Henry B. Eyring</td>
+<td style="text-align: left;">April 2019</td>
+<td style="text-align: right;">2247</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Shall We Not Go On in So Great a Cause?</td>
+<td style="text-align: left;">M. Russell Ballard</td>
+<td style="text-align: left;">April 2020</td>
+<td style="text-align: right;">2234</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Inspired Ministering</td>
+<td style="text-align: left;">Henry B. Eyring</td>
+<td style="text-align: left;">April 2018</td>
+<td style="text-align: right;">2217</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Your Priesthood Playbook</td>
+<td style="text-align: left;">Gary E. Stevenson</td>
+<td style="text-align: left;">April 2019</td>
+<td style="text-align: right;">2202</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>Return to the opening request. Confirm that every displayed column serves the request and that the rows are ordered by word count.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="multiple-columns-break-ties" class="slide level2">
+<h2>Multiple columns break ties</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>ordered <span class="op">=</span> selected.sort_values(</span>
+<span id="cb33-2"><a></a>    [<span class="st">"year"</span>, <span class="st">"num_words"</span>],</span>
+<span id="cb33-3"><a></a>    ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">False</span>]</span>
+<span id="cb33-4"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li class="fragment">Put newer years first.</li>
+<li class="fragment">Within each year, put longer talks first.</li>
+</ol>
+<div class="takeaway">
+<p>The lists pair each column with its ordering direction.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Connect this syntax to SQL <code>ORDER BY</code> for students who know it. The first column has priority. The second column decides the order among rows tied on the first.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="read-a-multi-column-order" class="slide level2 smaller">
+<h2>Read a multi-column order</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">False</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">num_words</th>
+<th style="text-align: left;">reason for position</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1508</td>
+<td style="text-align: left;">newest year, largest value within 2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1456</td>
+<td style="text-align: left;">newest year, next value within 2020</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1411</td>
+<td style="text-align: left;">newest year, next value within 2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1652</td>
+<td style="text-align: left;">next year, largest value within 2019</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1517</td>
+<td style="text-align: left;">next year, next value within 2019</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Ask why the 2019 talk with 1,652 words appears below every 2020 talk. Year has priority because it appears first in the sorting list.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="new-columns-use-vectorized-expressions" class="slide level2">
+<h2>New columns use vectorized expressions</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>recent_talks <span class="op">=</span> talks.loc[recent_mask].copy()</span>
+<span id="cb35-2"><a></a></span>
+<span id="cb35-3"><a></a>recent_median <span class="op">=</span> recent_talks[<span class="st">"num_words"</span>].median()</span>
+<span id="cb35-4"><a></a></span>
+<span id="cb35-5"><a></a>recent_talks[<span class="st">"above_recent_median"</span>] <span class="op">=</span> (</span>
+<span id="cb35-6"><a></a>    recent_talks[<span class="st">"num_words"</span>] <span class="op">&gt;</span> recent_median</span>
+<span id="cb35-7"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment takeaway">
+<p>The comparison produces one new value for every row.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>The explicit copy communicates that <code>recent_talks</code> is now an independent working table. pandas 3 Copy-on-Write already prevents edits to this subset from changing <code>talks</code>, but the explicit copy also works in earlier versions and remains readable.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="simple-summaries-answer-column-questions" class="slide level2">
+<h2>Simple summaries answer column questions</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a></a>recent_talks[<span class="st">"num_words"</span>].mean()</span>
+<span id="cb36-2"><a></a>recent_talks[<span class="st">"num_words"</span>].median()</span>
+<span id="cb36-3"><a></a></span>
+<span id="cb36-4"><a></a>recent_talks[<span class="st">"speaker"</span>].value_counts().head()</span>
+<span id="cb36-5"><a></a>recent_talks[<span class="st">"above_recent_median"</span>].value_counts()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">Reductions turn many values into one summary.</li>
+<li class="fragment"><code>value_counts()</code> summarizes repeated categories.</li>
+<li class="fragment">Grouped summaries come in the next pandas lesson.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Connect reductions back to NumPy. Keep <code>groupby()</code> out of today’s syntax so the next lesson can motivate split, apply, and combine properly.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="named-steps-expose-the-reasoning" class="slide level2">
+<h2>Named steps expose the reasoning</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>mask <span class="op">=</span> talks[<span class="st">"year"</span>].between(<span class="dv">2018</span>, <span class="dv">2020</span>)</span>
+<span id="cb37-2"><a></a></span>
+<span id="cb37-3"><a></a>columns <span class="op">=</span> [</span>
+<span id="cb37-4"><a></a>    <span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"conference"</span>, <span class="st">"num_words"</span></span>
+<span id="cb37-5"><a></a>]</span>
+<span id="cb37-6"><a></a></span>
+<span id="cb37-7"><a></a>recent <span class="op">=</span> talks.loc[mask, columns]</span>
+<span id="cb37-8"><a></a></span>
+<span id="cb37-9"><a></a>answer <span class="op">=</span> recent.sort_values(</span>
+<span id="cb37-10"><a></a>    <span class="st">"num_words"</span>, ascending<span class="op">=</span><span class="va">False</span></span>
+<span id="cb37-11"><a></a>).head(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Recommend named steps while students are learning and debugging. Each name gives them a checkpoint where they can inspect shape and content.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-same-logic-as-a-chain" class="slide level2">
+<h2>The same logic as a chain</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>answer <span class="op">=</span> (</span>
+<span id="cb38-2"><a></a>    talks.loc[</span>
+<span id="cb38-3"><a></a>        talks[<span class="st">"year"</span>].between(<span class="dv">2018</span>, <span class="dv">2020</span>),</span>
+<span id="cb38-4"><a></a>        [<span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"conference"</span>, <span class="st">"num_words"</span>]</span>
+<span id="cb38-5"><a></a>    ]</span>
+<span id="cb38-6"><a></a>    .sort_values(<span class="st">"num_words"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb38-7"><a></a>    .head(<span class="dv">5</span>)</span>
+<span id="cb38-8"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="takeaway">
+<p>Read the chain from top to bottom as a sequence of table operations.</p>
+</div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Students should be able to read this chain today. They do not need to prefer it over named intermediate objects yet.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="translate-the-request-into-pandas" class="slide level2">
+<h2>Translate the request into pandas</h2>
+<blockquote>
+<p>Find Sunday morning talks from 2019 or 2020 with 1,400 through 1,700 words. Keep the title, speaker, conference, year, and word count. Put newer years first, then longer talks within each year.</p>
+</blockquote>
+<p>With a partner, identify:</p>
+<ol type="1">
+<li class="fragment">the row conditions</li>
+<li class="fragment">the selected columns</li>
+<li class="fragment">the ordering columns and directions</li>
+<li class="fragment">one result check</li>
+</ol>
+<aside class="notes">
+<p>Planned time: 4 minutes.</p>
+<p>Give pairs two minutes. Ask them to explain the operation sequence before writing exact syntax. A useful check is that every returned row should have a Sunday morning session, an allowed year, and a word count inside the inclusive range.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-defensible-translation" class="slide level2">
+<h2>A defensible translation</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>mask <span class="op">=</span> (</span>
+<span id="cb39-2"><a></a>    talks[<span class="st">"year"</span>].between(<span class="dv">2019</span>, <span class="dv">2020</span>)</span>
+<span id="cb39-3"><a></a>    <span class="op">&amp;</span> (talks[<span class="st">"session"</span>] <span class="op">==</span> <span class="st">"sunday-morning"</span>)</span>
+<span id="cb39-4"><a></a>    <span class="op">&amp;</span> talks[<span class="st">"num_words"</span>].between(<span class="dv">1400</span>, <span class="dv">1700</span>)</span>
+<span id="cb39-5"><a></a>)</span>
+<span id="cb39-6"><a></a></span>
+<span id="cb39-7"><a></a>selected <span class="op">=</span> talks.loc[</span>
+<span id="cb39-8"><a></a>    mask,</span>
+<span id="cb39-9"><a></a>    [<span class="st">"talk_name"</span>, <span class="st">"speaker"</span>, <span class="st">"conference"</span>, <span class="st">"year"</span>, <span class="st">"num_words"</span>]</span>
+<span id="cb39-10"><a></a>]</span>
+<span id="cb39-11"><a></a></span>
+<span id="cb39-12"><a></a>result <span class="op">=</span> selected.sort_values(</span>
+<span id="cb39-13"><a></a>    [<span class="st">"year"</span>, <span class="st">"num_words"</span>],</span>
+<span id="cb39-14"><a></a>    ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">False</span>]</span>
+<span id="cb39-15"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Use this as the immediate summary. Point to the one-to-one relationship between the prose request and each part of the code.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="repository-activity" class="slide level2">
+<h2>Repository activity</h2>
+<ol type="1">
+<li>Fork <code>stat-386-pandas-foundations</code> on GitHub.</li>
+<li>Clone your fork.</li>
+<li>Create the environment.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a></a><span class="fu">git</span> clone https://github.com/YOUR-USERNAME/stat-386-pandas-foundations.git</span>
+<span id="cb40-2"><a></a><span class="bu">cd</span> stat-386-pandas-foundations</span>
+<span id="cb40-3"><a></a><span class="ex">uv</span> sync</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Open <code>activity/pandas-foundations.qmd</code>.</p>
+<aside class="notes">
+<p>Planned time: 3 minutes.</p>
+<p>Replace the placeholder URL after uploading the repository. The completed version is <code>activity/pandas-foundations-complete.qmd</code>. Ask students to begin with the starter file.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="activity-checkpoints" class="slide level2">
+<h2>Activity checkpoints</h2>
+<ol type="1">
+<li class="fragment">Inspect the table and state what one row represents.</li>
+<li class="fragment">Predict whether each selection returns a Series or DataFrame.</li>
+<li class="fragment">Build and inspect one Boolean mask.</li>
+<li class="fragment">Filter and select columns with <code>.loc[]</code>.</li>
+<li class="fragment">Sort by one column, then by two columns.</li>
+<li class="fragment">Complete the Sunday morning request.</li>
+</ol>
+<aside class="notes">
+<p>Planned time: 10 to 15 minutes.</p>
+<p>Pause after checkpoints 2, 3, and 5. Ask students to compare types, shapes, and row counts. If class time is short, complete the first three checkpoints together and release students for the final request.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-activity-result" class="slide level2 smaller">
+<h2>The activity result</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">talk_name</th>
+<th style="text-align: left;">speaker</th>
+<th style="text-align: left;">conference</th>
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">num_words</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">I Believe in Angels</td>
+<td style="text-align: left;">Carlos A. Godoy</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1508</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">That They May See</td>
+<td style="text-align: left;">Bonnie H. Cordon</td>
+<td style="text-align: left;">April 2020</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1456</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Peace, Be Still</td>
+<td style="text-align: left;">Lisa L. Harkness</td>
+<td style="text-align: left;">October 2020</td>
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1411</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Christ: The Light That Shines in Darkness</td>
+<td style="text-align: left;">Sharon Eubank</td>
+<td style="text-align: left;">April 2019</td>
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1652</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Finding Joy in Sharing the Gospel</td>
+<td style="text-align: left;">Cristina B. Franco</td>
+<td style="text-align: left;">October 2019</td>
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1517</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Savior’s Touch</td>
+<td style="text-align: left;">Walter F. González</td>
+<td style="text-align: left;">October 2019</td>
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1487</td>
+</tr>
+</tbody>
+</table>
+<div class="question">
+<p>How can you verify the filtering and ordering without rereading the code?</p>
+</div>
+<aside class="notes">
+<p>Planned time: 3 minutes.</p>
+<p>Reveal this only after students finish or during the debrief. The year and word-count patterns provide visible checks. There should be six rows.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="what-pandas-contributed" class="slide level2">
+<h2>What pandas contributed</h2>
+<ul>
+<li class="fragment">Labels kept variables connected to their meanings.</li>
+<li class="fragment">A Boolean Series made one filtering decision per talk.</li>
+<li class="fragment"><code>.loc[]</code> selected rows and columns together.</li>
+<li class="fragment"><code>sort_values()</code> expressed priority and tie-breaking.</li>
+<li class="fragment">Vectorized expressions created values for every row.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 2 minutes.</p>
+<p>Ask students to name the operation that served each part of the activity request before revealing the bullets.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="exit-check" class="slide level2">
+<h2>Exit check</h2>
+<p>For each line, predict the result type or meaning:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>talks[<span class="st">"speaker"</span>]</span>
+<span id="cb41-2"><a></a></span>
+<span id="cb41-3"><a></a>talks[[<span class="st">"speaker"</span>]]</span>
+<span id="cb41-4"><a></a></span>
+<span id="cb41-5"><a></a>talks.loc[talks[<span class="st">"year"</span>] <span class="op">==</span> <span class="dv">2020</span>, [<span class="st">"speaker"</span>, <span class="st">"talk_name"</span>]]</span>
+<span id="cb41-6"><a></a></span>
+<span id="cb41-7"><a></a>talks.sort_values(</span>
+<span id="cb41-8"><a></a>    [<span class="st">"year"</span>, <span class="st">"num_words"</span>],</span>
+<span id="cb41-9"><a></a>    ascending<span class="op">=</span>[<span class="va">True</span>, <span class="va">False</span>]</span>
+<span id="cb41-10"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<aside class="notes">
+<p>Planned time: 3 minutes.</p>
+<p>Expected responses: Series, one-column DataFrame, a two-column DataFrame containing 2020 talks, and a DataFrame ordered from earlier to later years with larger word counts first within each year.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="pandas-organizing-idea" class="slide level2">
+<h2>pandas’ organizing idea</h2>
+<div class="takeaway">
+<p>A DataFrame keeps values connected to labels, and a clear analysis translates a question into inspectable table operations.</p>
+</div>
+<ul>
+<li class="fragment">Know what one row represents.</li>
+<li class="fragment">Predict the type and shape of each intermediate result.</li>
+<li class="fragment">Check that the final rows and columns answer the original question.</li>
+</ul>
+<aside class="notes">
+<p>Planned time: 1 minute.</p>
+<p>End with the reasoning habit rather than a list of methods. The next lesson can build on this foundation by asking how to summarize separate groups of rows.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>STAT 386: pandas foundations</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.5e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/tjkerby\.github\.io\/stat-386-pandas-foundations\/");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

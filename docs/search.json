@@ -1,0 +1,492 @@
+[
+  {
+    "objectID": "activity/pandas-foundations-complete.html",
+    "href": "activity/pandas-foundations-complete.html",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "",
+    "text": "This file contains one completed version of the in-class activity. Equivalent code can also be correct when it produces the same well-checked result."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#purpose",
+    "href": "activity/pandas-foundations-complete.html#purpose",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "",
+    "text": "This file contains one completed version of the in-class activity. Equivalent code can also be correct when it produces the same well-checked result."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#setup",
+    "href": "activity/pandas-foundations-complete.html#setup",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Setup",
+    "text": "Setup\n\nimport pandas as pd\n\ntalks = pd.read_csv(\"../data/talks.csv\")"
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-1-understand-the-table",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-1-understand-the-table",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 1: Understand the table",
+    "text": "Checkpoint 1: Understand the table\n\ntalks[[\"talk_name\", \"speaker\", \"conference\", \"num_words\"]].head()\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nnum_words\n\n\n\n\n0\nFinding Joy in Christ\nSteven J. Lund\nOctober 2020\n1514\n\n\n1\nThe Culture of Christ\nWilliam K. Jackson\nOctober 2020\n1500\n\n\n2\nLet Patience Have Her Perfect Work, and Count ...\nJeremy R. Jaggi\nOctober 2020\n1492\n\n\n3\nAsk, Seek, and Knock\nMilton Camargo\nOctober 2020\n1484\n\n\n4\nEnduring Power\nKelly R. Johnson\nOctober 2020\n1430\n\n\n\n\n\n\n\n\ntalks.shape\n\n(794, 14)\n\n\nEach row represents one General Conference talk. The shape (794, 14) means that the table contains 794 observed talks and 14 recorded variables."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-2-predict-the-object",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-2-predict-the-object",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 2: Predict the object",
+    "text": "Checkpoint 2: Predict the object\n\none_series = talks[\"num_words\"]\ntype(one_series), one_series.shape\n\n(pandas.Series, (794,))\n\n\n\none_column_frame = talks[[\"num_words\"]]\ntype(one_column_frame), one_column_frame.shape\n\n(pandas.DataFrame, (794, 1))\n\n\n\nthree_column_frame = talks[[\"talk_name\", \"speaker\", \"num_words\"]]\ntype(three_column_frame), three_column_frame.shape\n\n(pandas.DataFrame, (794, 3))\n\n\nThe first selection returns a Series with shape (794,). The other two selections return DataFrames with shapes (794, 1) and (794, 3)."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-3-build-a-mask",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-3-build-a-mask",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 3: Build a mask",
+    "text": "Checkpoint 3: Build a mask\n\nrecent_mask = talks[\"year\"].between(2018, 2020)\n\n\nrecent_mask.head(), recent_mask.shape, recent_mask.sum()\n\n(0    True\n 1    True\n 2    True\n 3    True\n 4    True\n Name: year, dtype: bool,\n (794,),\n np.int64(201))\n\n\nOne True means that the corresponding talk occurred from 2018 through 2020. The mask has 794 entries because it makes one decision for each row."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-4-filter-and-select-together",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-4-filter-and-select-together",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 4: Filter and select together",
+    "text": "Checkpoint 4: Filter and select together\n\nrecent_talks = talks.loc[\n    recent_mask,\n    [\"talk_name\", \"speaker\", \"conference\", \"year\", \"num_words\"]\n].copy()\n\n\nrecent_talks.shape, recent_talks.head()\n\n((201, 5),\n                                            talk_name             speaker  \\\n 0                              Finding Joy in Christ      Steven J. Lund   \n 1                              The Culture of Christ  William K. Jackson   \n 2  Let Patience Have Her Perfect Work, and Count ...     Jeremy R. Jaggi   \n 3                               Ask, Seek, and Knock      Milton Camargo   \n 4                                     Enduring Power    Kelly R. Johnson   \n \n      conference  year  num_words  \n 0  October 2020  2020       1514  \n 1  October 2020  2020       1500  \n 2  October 2020  2020       1492  \n 3  October 2020  2020       1484  \n 4  October 2020  2020       1430  )"
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-5-sort-the-qualifying-rows",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-5-sort-the-qualifying-rows",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 5: Sort the qualifying rows",
+    "text": "Checkpoint 5: Sort the qualifying rows\n\nrecent_talks.sort_values(\"num_words\", ascending=False).head()\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nyear\nnum_words\n\n\n\n\n727\nHear Him\nRussell M. Nelson\nApril 2020\n2020\n2591\n\n\n717\nA Home Where the Spirit of the Lord Dwells\nHenry B. Eyring\nApril 2019\n2019\n2247\n\n\n694\nShall We Not Go On in So Great a Cause?\nM. Russell Ballard\nApril 2020\n2020\n2234\n\n\n701\nInspired Ministering\nHenry B. Eyring\nApril 2018\n2018\n2217\n\n\n377\nYour Priesthood Playbook\nGary E. Stevenson\nApril 2019\n2019\n2202\n\n\n\n\n\n\n\n\nrecent_talks.sort_values(\n    [\"year\", \"num_words\"],\n    ascending=[False, False]\n).head(10)\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nyear\nnum_words\n\n\n\n\n727\nHear Him\nRussell M. Nelson\nApril 2020\n2020\n2591\n\n\n694\nShall We Not Go On in So Great a Cause?\nM. Russell Ballard\nApril 2020\n2020\n2234\n\n\n394\nA Good Foundation against the Time to Come\nGary E. Stevenson\nApril 2020\n2020\n2194\n\n\n368\nThe Coming Forth of the Book of Mormon\nUlisses Soares\nApril 2020\n2020\n2170\n\n\n258\nUnited in Accomplishing God’s Work\nJean B. Bingham\nApril 2020\n2020\n2111\n\n\n493\nSharing the Message of the Restoration and the...\nD. Todd Christofferson\nApril 2020\n2020\n2016\n\n\n485\nHearts Knit in Righteousness and Unity\nQuentin L. Cook\nOctober 2020\n2020\n1985\n\n\n499\nWe Will Prove Them Herewith\nDavid A. Bednar\nOctober 2020\n2020\n1984\n\n\n610\nCome and Belong\nDieter F. Uchtdorf\nApril 2020\n2020\n1981\n\n\n733\nHe Goes before Us\nHenry B. Eyring\nApril 2020\n2020\n1976\n\n\n\n\n\n\n\nYear has priority in the second result. Every 2020 talk appears before every 2019 talk, even when a 2019 talk has a larger word count."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#checkpoint-6-create-a-variable",
+    "href": "activity/pandas-foundations-complete.html#checkpoint-6-create-a-variable",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Checkpoint 6: Create a variable",
+    "text": "Checkpoint 6: Create a variable\n\nrecent_median = recent_talks[\"num_words\"].median()\n\nrecent_talks[\"above_recent_median\"] = (\n    recent_talks[\"num_words\"] &gt; recent_median\n)\n\nrecent_median\n\nnp.float64(1650.0)\n\n\n\nrecent_talks[\"above_recent_median\"].value_counts()\n\nabove_recent_median\nFalse    101\nTrue     100\nName: count, dtype: int64"
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#final-request",
+    "href": "activity/pandas-foundations-complete.html#final-request",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Final request",
+    "text": "Final request\n\n1. Build the row condition\n\nrequest_mask = (\n    talks[\"year\"].between(2019, 2020)\n    & (talks[\"session\"] == \"sunday-morning\")\n    & talks[\"num_words\"].between(1400, 1700)\n)\n\n\n\n2. Select rows and columns\n\nselected = talks.loc[\n    request_mask,\n    [\"talk_name\", \"speaker\", \"conference\", \"year\", \"num_words\"]\n]\n\n\n\n3. Apply the requested ordering\n\nresult = selected.sort_values(\n    [\"year\", \"num_words\"],\n    ascending=[False, False]\n)\n\nresult\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nyear\nnum_words\n\n\n\n\n214\nI Believe in Angels\nCarlos A. Godoy\nOctober 2020\n2020\n1508\n\n\n259\nThat They May See\nBonnie H. Cordon\nApril 2020\n2020\n1456\n\n\n120\nPeace, Be Still\nLisa L. Harkness\nOctober 2020\n2020\n1411\n\n\n127\nChrist: The Light That Shines in Darkness\nSharon Eubank\nApril 2019\n2019\n1652\n\n\n125\nFinding Joy in Sharing the Gospel\nCristina B. Franco\nOctober 2019\n2019\n1517\n\n\n321\nThe Savior’s Touch\nWalter F. González\nOctober 2019\n2019\n1487\n\n\n\n\n\n\n\n\n\n4. Check the result\n\nchecks = {\n    \"six_rows\": len(result) == 6,\n    \"allowed_years\": result[\"year\"].isin([2019, 2020]).all(),\n    \"word_range\": result[\"num_words\"].between(1400, 1700).all(),\n    \"all_sunday_morning\": talks.loc[result.index, \"session\"].eq(\n        \"sunday-morning\"\n    ).all(),\n}\n\nchecks\n\n{'six_rows': True,\n 'allowed_years': np.True_,\n 'word_range': np.True_,\n 'all_sunday_morning': np.True_}\n\n\nThe visible table places all 2020 talks above the 2019 talks. Within each year, the word counts decrease from top to bottom."
+  },
+  {
+    "objectID": "activity/pandas-foundations-complete.html#reflection",
+    "href": "activity/pandas-foundations-complete.html#reflection",
+    "title": "pandas Foundations: Completed Activity",
+    "section": "Reflection",
+    "text": "Reflection\nThe written request supplies three row conditions, five output columns, and two sorting priorities. The code preserves that structure: the mask defines which talks qualify, .loc[] retains the requested fields, and sort_values() puts year ahead of word count when ordering the result."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#a-request-about-794-talks",
+    "href": "slides/pandas-foundations.html#a-request-about-794-talks",
+    "title": "pandas",
+    "section": "A request about 794 talks",
+    "text": "A request about 794 talks\nYou receive a table with 794 General Conference talks and 14 variables.\n\nFind the five talks from 2018 through 2020 with the largest word counts. Show the title, speaker, conference, and word count.\n\n\nWhat must your code do before you can answer?\n\n\nPlanned time: 2 minutes.\nRead the request without showing code. Ask students to name the decisions hidden inside it. Listen for understanding rows and columns, filtering years, choosing columns, sorting, and keeping five rows."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#think-pair-share",
+    "href": "slides/pandas-foundations.html#think-pair-share",
+    "title": "pandas",
+    "section": "Think, pair, share",
+    "text": "Think, pair, share\n\n\nWhat does one row need to represent?\nWhich variables matter for the request?\nWhich observations qualify?\nHow should the qualifying rows be ordered?\nWhat would you check before reporting the answer?\n\n\n\nPlanned time: 4 minutes.\nGive students about 45 seconds to think and 90 seconds to compare. During the share, collect one answer for each question. Keep the discussion at the level of table operations rather than pandas syntax."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#a-data-question-becomes-table-operations",
+    "href": "slides/pandas-foundations.html#a-data-question-becomes-table-operations",
+    "title": "pandas",
+    "section": "A data question becomes table operations",
+    "text": "A data question becomes table operations\n\nUnderstand: identify the observational unit and variables.\nSelect: keep the columns needed for the answer.\nFilter: keep the rows that satisfy the conditions.\nOrder: arrange the rows so the requested cases come first.\nCheck: confirm the shape and meaning of the result.\n\n\npandas gives these operations a vocabulary.\n\n\nPlanned time: 2 minutes.\nUse this as the debrief for the discussion. The five verbs organize the rest of the lecture. Point out that the order of selecting and filtering can vary, but every operation should serve the question."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#todays-problem",
+    "href": "slides/pandas-foundations.html#todays-problem",
+    "title": "pandas",
+    "section": "Today’s problem",
+    "text": "Today’s problem\n\nHow can we translate a question about tabular data into explicit operations on labeled rows and columns?\n\nBy the end of class, you should be able to reason about:\n\nSeries and DataFrames\nlabels, positions, and alignment\nselecting and filtering observations\nsorting by one or more variables\nvectorized variables and simple summaries\n\n\nPlanned time: 1 minute.\nThis is the roadmap. Tell students that the opening request will return in the repository activity."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-numpy-array-from-last-class",
+    "href": "slides/pandas-foundations.html#the-numpy-array-from-last-class",
+    "title": "pandas",
+    "section": "The NumPy array from last class",
+    "text": "The NumPy array from last class\nscores = np.array([\n    [82, 91, 88],\n    [75, 84, 79],\n    [93, 89, 95],\n    [68, 72, 74]\n])\n\nShape tells us there are four rows and three columns.\nPosition tells us where each value lives.\nWe must remember what each row and column means.\n\n\nPlanned time: 1 minute.\nThis should feel completely familiar. Ask what one row and one column represent before advancing."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-same-values-with-labels",
+    "href": "slides/pandas-foundations.html#the-same-values-with-labels",
+    "title": "pandas",
+    "section": "The same values with labels",
+    "text": "The same values with labels\nscore_df = pd.DataFrame(\n    scores,\n    index=[\"Ana\", \"Bo\", \"Cam\", \"Dev\"],\n    columns=[\"exam_1\", \"exam_2\", \"exam_3\"]\n)\n\n\n\n\nstudent\nexam_1\nexam_2\nexam_3\n\n\n\n\nAna\n82\n91\n88\n\n\nBo\n75\n84\n79\n\n\nCam\n93\n89\n95\n\n\nDev\n68\n72\n74\n\n\n\n\n\nPlanned time: 2 minutes.\nThe values have not changed. The table now carries names for both axes. Explain that the leftmost student labels form the index and the exam names label columns."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#what-pandas-adds",
+    "href": "slides/pandas-foundations.html#what-pandas-adds",
+    "title": "pandas",
+    "section": "What pandas adds",
+    "text": "What pandas adds\n\nRow and column labels carry meaning into the code.\nEach column can have its own data type.\nLabels support selection and automatic alignment.\nTable methods express common data tasks directly.\n\n\nShape, vectorization, and Boolean masks still matter.\n\n\nPlanned time: 2 minutes.\nKeep the NumPy connection strong without claiming that every modern pandas column must use an ordinary NumPy array internally. pandas can use additional storage types.\nSource: https://pandas.pydata.org/docs/user_guide/dsintro.html"
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#two-core-objects",
+    "href": "slides/pandas-foundations.html#two-core-objects",
+    "title": "pandas",
+    "section": "Two core objects",
+    "text": "Two core objects\n\n\nSeries\nOne labeled sequence of values\nscore_df[\"exam_1\"]\nOne dimension\n\nDataFrame\nLabeled rows and columns\nscore_df[[\"exam_1\", \"exam_3\"]]\nTwo dimensions\n\n\nPlanned time: 2 minutes.\nDescribe a DataFrame as a collection of aligned Series. The single bracket and double bracket distinction will return later with visible results."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#labels-participate-in-computation",
+    "href": "slides/pandas-foundations.html#labels-participate-in-computation",
+    "title": "pandas",
+    "section": "Labels participate in computation",
+    "text": "Labels participate in computation\nfirst_exam = pd.Series(\n    [82, 75], index=[\"Ana\", \"Bo\"]\n)\n\nbonus = pd.Series(\n    [5, 2], index=[\"Bo\", \"Ana\"]\n)\n\nWhat should first_exam + bonus return?\n\n\nPlanned time: 1 minute.\nAsk students to predict before revealing the result. NumPy-style positional addition would suggest 87 and 77. pandas uses the labels."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#pandas-aligns-matching-labels",
+    "href": "slides/pandas-foundations.html#pandas-aligns-matching-labels",
+    "title": "pandas",
+    "section": "pandas aligns matching labels",
+    "text": "pandas aligns matching labels\nfirst_exam + bonus\n\nAna    84\nBo     80\ndtype: int64\n\n\nAna receives Ana’s bonus even though the Series use different orders.\n\n\nPlanned time: 2 minutes.\nRead the calculation for each student. Label alignment prevents values from silently changing meaning when their order differs. Mention that missing labels introduce missing results, but leave missingness for its dedicated lesson.\nSource: https://pandas.pydata.org/docs/user_guide/dsintro.html"
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-bridge-from-numpy",
+    "href": "slides/pandas-foundations.html#the-bridge-from-numpy",
+    "title": "pandas",
+    "section": "The bridge from NumPy",
+    "text": "The bridge from NumPy\n\n\n\nNumPy idea\npandas continuation\n\n\n\n\nshape and axes\nrows and columns with labels\n\n\none array dtype\none dtype per Series\n\n\npositional indexing\nlabel and position indexing\n\n\nBoolean arrays\naligned Boolean Series\n\n\nvectorized operations\ncolumn expressions\n\n\n\n\nPlanned time: 1 minute.\nThis is the conceptual summary of the bridge. Avoid spending time converting repeatedly between NumPy and pandas."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#meet-the-talks-table",
+    "href": "slides/pandas-foundations.html#meet-the-talks-table",
+    "title": "pandas",
+    "section": "Meet the talks table",
+    "text": "Meet the talks table\nimport pandas as pd\n\ntalks = pd.read_csv(\"data/talks.csv\")\n\n794 rows\n14 columns\nConferences from 2010 through 2020\n\n\nWhat should one row represent?\n\n\nPlanned time: 1 minute.\nLoading is setup rather than the focus today. Students will examine file interpretation more deeply in the importing and loading lesson."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-observational-unit",
+    "href": "slides/pandas-foundations.html#the-observational-unit",
+    "title": "pandas",
+    "section": "The observational unit",
+    "text": "The observational unit\n\nEach row represents one General Conference talk.\n\nColumns describe that talk, including:\n\nits title and speaker\nits conference and session\nits word count and runtime\nits source link and short summary\n\n\nPlanned time: 2 minutes.\nAsk how the analysis would change if one row represented a speaker or a conference instead. The row definition constrains what each operation means."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#inspect-before-analyzing",
+    "href": "slides/pandas-foundations.html#inspect-before-analyzing",
+    "title": "pandas",
+    "section": "Inspect before analyzing",
+    "text": "Inspect before analyzing\ntalks.head()\ntalks.shape\ntalks.columns\ntalks.dtypes\ntalks.info()\n\nDo the rows match the expected observational unit?\nDid the expected columns arrive?\nDo the data types match the variables’ meanings?\nDoes the size seem plausible?\n\n\nPlanned time: 2 minutes.\nPresent these as evidence checks rather than a memorized inspection ritual. Ask what each command can reveal and what it cannot reveal."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#a-readable-first-look",
+    "href": "slides/pandas-foundations.html#a-readable-first-look",
+    "title": "pandas",
+    "section": "A readable first look",
+    "text": "A readable first look\ntalks[[\n    \"talk_name\", \"speaker\", \"conference\", \"num_words\"\n]].head()\n\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nnum_words\n\n\n\n\nFinding Joy in Christ\nSteven J. Lund\nOctober 2020\n1514\n\n\nThe Culture of Christ\nWilliam K. Jackson\nOctober 2020\n1500\n\n\nLet Patience Have Her Perfect Work, and Count It All Joy!\nJeremy R. Jaggi\nOctober 2020\n1492\n\n\nAsk, Seek, and Knock\nMilton Camargo\nOctober 2020\n1484\n\n\nEnduring Power\nKelly R. Johnson\nOctober 2020\n1430\n\n\n\n\nPlanned time: 2 minutes.\nThe full DataFrame is too wide for a useful display. Selecting a few meaningful columns is part of inspection, not manipulation for its own sake."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#shape-has-a-substantive-meaning",
+    "href": "slides/pandas-foundations.html#shape-has-a-substantive-meaning",
+    "title": "pandas",
+    "section": "Shape has a substantive meaning",
+    "text": "Shape has a substantive meaning\ntalks.shape\n\n(794, 14)\n\n\n794 observed talks\n14 recorded variables for each talk\n\n\nPlanned time: 1 minute.\nConnect this directly to the NumPy shape lesson. Students should state the substantive meaning before treating shape as a tuple to memorize."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#data-types-belong-to-columns",
+    "href": "slides/pandas-foundations.html#data-types-belong-to-columns",
+    "title": "pandas",
+    "section": "Data types belong to columns",
+    "text": "Data types belong to columns\ntalks[[\"talk_name\", \"year\", \"num_words\"]].dtypes\n\ntalk_name       object\nyear             int64\nnum_words        int64\ndtype: object\n\n\nWhich calculations make sense for each column?\n\n\nPlanned time: 2 minutes.\nThe word object is what this dataset reports for text under its current import settings. Do not generalize that all pandas text columns must always use object."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#selecting-one-column",
+    "href": "slides/pandas-foundations.html#selecting-one-column",
+    "title": "pandas",
+    "section": "Selecting one column",
+    "text": "Selecting one column\nword_counts = talks[\"num_words\"]\n\ntype(word_counts)\nword_counts.shape\n\npandas.Series\n(794,)\n\n\nPlanned time: 1 minute.\nA single column label returns a Series. Connect the one-dimensional shape to the prior NumPy indexing discussion."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#selecting-columns-as-a-dataframe",
+    "href": "slides/pandas-foundations.html#selecting-columns-as-a-dataframe",
+    "title": "pandas",
+    "section": "Selecting columns as a DataFrame",
+    "text": "Selecting columns as a DataFrame\nsmall_talks = talks[[\n    \"talk_name\", \"speaker\", \"num_words\"\n]]\n\ntype(small_talks)\nsmall_talks.shape\n\npandas.DataFrame\n(794, 3)\n\n\nPlanned time: 1 minute.\nThe outer brackets perform the DataFrame selection. The inner brackets create a Python list of column labels."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#single-and-double-brackets",
+    "href": "slides/pandas-foundations.html#single-and-double-brackets",
+    "title": "pandas",
+    "section": "Single and double brackets",
+    "text": "Single and double brackets\n\n\nSeries result\ntalks[\"num_words\"]\nShape: (794,)\n\nDataFrame result\ntalks[[\"num_words\"]]\nShape: (794, 1)\n\n\nThe values can match while the object structure differs.\n\n\nPlanned time: 2 minutes.\nAsk why the DataFrame version could be useful. It preserves a two-dimensional table and makes it easy to add more selected columns."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#labels-and-positions",
+    "href": "slides/pandas-foundations.html#labels-and-positions",
+    "title": "pandas",
+    "section": "Labels and positions",
+    "text": "Labels and positions\ndf.loc[row_labels, column_labels]\ndf.iloc[row_positions, column_positions]\n\n\n\nSelector\nInterprets 1 as\nBest when\n\n\n\n\n.loc[]\nan index label\nmeaning and conditions matter\n\n\n.iloc[]\nthe second position\nphysical position matters\n\n\n\n\nPlanned time: 2 minutes.\nSay loc as label location and iloc as integer location. A numeric index label can make the distinction less visible, which is why the score table uses names.\nSource: https://pandas.pydata.org/docs/user_guide/indexing.html"
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#one-selection-in-two-languages",
+    "href": "slides/pandas-foundations.html#one-selection-in-two-languages",
+    "title": "pandas",
+    "section": "One selection in two languages",
+    "text": "One selection in two languages\nscore_df.loc[\n    [\"Bo\", \"Cam\"],\n    [\"exam_1\", \"exam_3\"]\n]\nscore_df.iloc[\n    [1, 2],\n    [0, 2]\n]\n\n\n\n\nstudent\nexam_1\nexam_3\n\n\n\n\nBo\n75\n79\n\n\nCam\n93\n95\n\n\n\n\n\nPlanned time: 2 minutes.\nThe two expressions return the same values for the current table. Ask which expression would remain meaningful if the row order changed. The label-based selection is more closely tied to the substantive request."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#predict-the-result",
+    "href": "slides/pandas-foundations.html#predict-the-result",
+    "title": "pandas",
+    "section": "Predict the result",
+    "text": "Predict the result\nStarting from the four-row score DataFrame, predict the object type, shape, and contents of:\n\nscore_df[\"exam_1\"]\nscore_df[[\"exam_1\"]]\nscore_df.loc[[\"Ana\", \"Cam\"], [\"exam_2\"]]\nscore_df.iloc[:2, 1:]\n\n\nPlanned time: 4 minutes.\nGive students one minute individually and one minute with a partner. Ask pairs to justify the dimensions rather than only state the values. The expected shapes are (4,), (4, 1), (2, 1), and (2, 2)."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#selection-preserves-intended-structure",
+    "href": "slides/pandas-foundations.html#selection-preserves-intended-structure",
+    "title": "pandas",
+    "section": "Selection preserves intended structure",
+    "text": "Selection preserves intended structure\n\n\n\nExpression\nType\nShape\n\n\n\n\nscore_df[\"exam_1\"]\nSeries\n(4,)\n\n\nscore_df[[\"exam_1\"]]\nDataFrame\n(4, 1)\n\n\n.loc[[\"Ana\", \"Cam\"], [\"exam_2\"]]\nDataFrame\n(2, 1)\n\n\n.iloc[:2, 1:]\nDataFrame\n(2, 2)\n\n\n\n\nAsk what dimensions your selectors preserve or remove.\n\n\nPlanned time: 2 minutes.\nUse this as the immediate debrief. The goal is to make object shape predictable rather than mysterious."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#a-comparison-creates-a-boolean-series",
+    "href": "slides/pandas-foundations.html#a-comparison-creates-a-boolean-series",
+    "title": "pandas",
+    "section": "A comparison creates a Boolean Series",
+    "text": "A comparison creates a Boolean Series\nrecent_mask = talks[\"year\"].between(2018, 2020)\n\nrecent_mask.shape\nrecent_mask.sum()\n\n(794,)\n201\n\n\nPlanned time: 2 minutes.\nThe mask makes one decision per talk. Ask what True means in context. The sum counts True values because Boolean values behave as one and zero in this reduction."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#read-the-mask-beside-the-data",
+    "href": "slides/pandas-foundations.html#read-the-mask-beside-the-data",
+    "title": "pandas",
+    "section": "Read the mask beside the data",
+    "text": "Read the mask beside the data\n\n\n\n\n\n\n\n\n\nyear\ncondition\nkeep?\n\n\n\n\n2020\n2018 &lt;= 2020 &lt;= 2020\nTrue\n\n\n2019\n2018 &lt;= 2019 &lt;= 2020\nTrue\n\n\n2017\n2018 &lt;= 2017 &lt;= 2020\nFalse\n\n\n2018\n2018 &lt;= 2018 &lt;= 2020\nTrue\n\n\n2016\n2018 &lt;= 2016 &lt;= 2020\nFalse\n\n\n\n\n\nFiltering begins by making one explicit decision for each row.\n\n\nPlanned time: 2 minutes.\nTrace each row before showing selection syntax. This repeats the visible kept-versus-dropped approach from the NumPy slides."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#apply-the-mask-with-.loc",
+    "href": "slides/pandas-foundations.html#apply-the-mask-with-.loc",
+    "title": "pandas",
+    "section": "Apply the mask with .loc[]",
+    "text": "Apply the mask with .loc[]\nrecent_talks = talks.loc[\n    recent_mask,\n    [\"talk_name\", \"speaker\", \"conference\", \"year\", \"num_words\"]\n]\n\nThe expression before the comma selects rows.\nThe list after the comma selects columns.\nThe result has 201 rows and 5 columns.\n\n\nPlanned time: 2 minutes.\nRead the expression aloud as keep rows where the recent mask is true, then keep these five labeled columns. This makes the two-axis structure explicit."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#combining-conditions",
+    "href": "slides/pandas-foundations.html#combining-conditions",
+    "title": "pandas",
+    "section": "Combining conditions",
+    "text": "Combining conditions\nmask = (\n    talks[\"year\"].between(2019, 2020)\n    & (talks[\"session\"] == \"sunday-morning\")\n    & talks[\"num_words\"].between(1400, 1700)\n)\n\n& means elementwise AND.\n| means elementwise OR.\n~ reverses a Boolean condition.\nParentheses make each comparison explicit.\n\n\nPlanned time: 3 minutes.\nExplain why ordinary Python and, or, and not do not make one decision per row. Do not dwell on operator precedence rules. Teach parentheses as the readable standard."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#helpers-express-common-conditions",
+    "href": "slides/pandas-foundations.html#helpers-express-common-conditions",
+    "title": "pandas",
+    "section": "Helpers express common conditions",
+    "text": "Helpers express common conditions\n\n\nInclusive range\ntalks[\"year\"].between(2018, 2020)\n\nSet membership\ntalks[\"session\"].isin([\n    \"sunday-morning\",\n    \"sunday-afternoon\"\n])\n\n\nPlanned time: 2 minutes.\nShow the longer equivalent only verbally if useful. These helpers often express the data question more clearly than a long chain of repeated comparisons."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#three-filtering-mistakes",
+    "href": "slides/pandas-foundations.html#three-filtering-mistakes",
+    "title": "pandas",
+    "section": "Three filtering mistakes",
+    "text": "Three filtering mistakes\n# Python asks for one truth value\ncondition_1 and condition_2\n\n# The comparisons need parentheses\ntalks[\"year\"] &gt;= 2018 & talks[\"year\"] &lt;= 2020\n\n# This assignment targets a temporary result\ntalks[talks[\"year\"] &gt;= 2018][\"recent\"] = True\n\nUse vectorized operators, parenthesized comparisons, and one .loc[] assignment.\n\n\nPlanned time: 2 minutes.\nDo not ask students to memorize warning messages. Emphasize the reliable pattern. With pandas 3 Copy-on-Write, chained assignment never updates the original object.\nSources:\n\nhttps://pandas.pydata.org/docs/user_guide/indexing.html\nhttps://pandas.pydata.org/docs/user_guide/copy_on_write.html"
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#sorting-asks-a-separate-question",
+    "href": "slides/pandas-foundations.html#sorting-asks-a-separate-question",
+    "title": "pandas",
+    "section": "Sorting asks a separate question",
+    "text": "Sorting asks a separate question\nFiltering asks:\n\nWhich rows qualify?\n\nSorting asks:\n\nIn what order should the qualifying rows appear?\n\nrecent_talks.sort_values(\"num_words\")\n\nAscending order is the default.\n\n\nPlanned time: 2 minutes.\nConnect sorting to the opening request. The qualifying rows do not change. Only their displayed order changes."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#largest-values-first",
+    "href": "slides/pandas-foundations.html#largest-values-first",
+    "title": "pandas",
+    "section": "Largest values first",
+    "text": "Largest values first\nlongest_recent = (\n    recent_talks\n    .sort_values(\"num_words\", ascending=False)\n    .head(5)\n)\n\nascending=False places larger values first.\nhead(5) keeps the first five rows after sorting.\nsort_values() returns a reordered DataFrame.\n\n\nPlanned time: 2 minutes.\nAsk what would happen if head(5) came before sorting. It would return the largest values only by accident. The sequence of operations carries meaning."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-five-longest-recent-talks",
+    "href": "slides/pandas-foundations.html#the-five-longest-recent-talks",
+    "title": "pandas",
+    "section": "The five longest recent talks",
+    "text": "The five longest recent talks\n\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nnum_words\n\n\n\n\nHear Him\nRussell M. Nelson\nApril 2020\n2591\n\n\nA Home Where the Spirit of the Lord Dwells\nHenry B. Eyring\nApril 2019\n2247\n\n\nShall We Not Go On in So Great a Cause?\nM. Russell Ballard\nApril 2020\n2234\n\n\nInspired Ministering\nHenry B. Eyring\nApril 2018\n2217\n\n\nYour Priesthood Playbook\nGary E. Stevenson\nApril 2019\n2202\n\n\n\n\nPlanned time: 1 minute.\nReturn to the opening request. Confirm that every displayed column serves the request and that the rows are ordered by word count."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#multiple-columns-break-ties",
+    "href": "slides/pandas-foundations.html#multiple-columns-break-ties",
+    "title": "pandas",
+    "section": "Multiple columns break ties",
+    "text": "Multiple columns break ties\nordered = selected.sort_values(\n    [\"year\", \"num_words\"],\n    ascending=[False, False]\n)\n\nPut newer years first.\nWithin each year, put longer talks first.\n\n\nThe lists pair each column with its ordering direction.\n\n\nPlanned time: 2 minutes.\nConnect this syntax to SQL ORDER BY for students who know it. The first column has priority. The second column decides the order among rows tied on the first."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#read-a-multi-column-order",
+    "href": "slides/pandas-foundations.html#read-a-multi-column-order",
+    "title": "pandas",
+    "section": "Read a multi-column order",
+    "text": "Read a multi-column order\nascending=[False, False]\n\n\n\nyear\nnum_words\nreason for position\n\n\n\n\n2020\n1508\nnewest year, largest value within 2020\n\n\n2020\n1456\nnewest year, next value within 2020\n\n\n2020\n1411\nnewest year, next value within 2020\n\n\n2019\n1652\nnext year, largest value within 2019\n\n\n2019\n1517\nnext year, next value within 2019\n\n\n\n\nPlanned time: 2 minutes.\nAsk why the 2019 talk with 1,652 words appears below every 2020 talk. Year has priority because it appears first in the sorting list."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#new-columns-use-vectorized-expressions",
+    "href": "slides/pandas-foundations.html#new-columns-use-vectorized-expressions",
+    "title": "pandas",
+    "section": "New columns use vectorized expressions",
+    "text": "New columns use vectorized expressions\nrecent_talks = talks.loc[recent_mask].copy()\n\nrecent_median = recent_talks[\"num_words\"].median()\n\nrecent_talks[\"above_recent_median\"] = (\n    recent_talks[\"num_words\"] &gt; recent_median\n)\n\nThe comparison produces one new value for every row.\n\n\nPlanned time: 2 minutes.\nThe explicit copy communicates that recent_talks is now an independent working table. pandas 3 Copy-on-Write already prevents edits to this subset from changing talks, but the explicit copy also works in earlier versions and remains readable."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#simple-summaries-answer-column-questions",
+    "href": "slides/pandas-foundations.html#simple-summaries-answer-column-questions",
+    "title": "pandas",
+    "section": "Simple summaries answer column questions",
+    "text": "Simple summaries answer column questions\nrecent_talks[\"num_words\"].mean()\nrecent_talks[\"num_words\"].median()\n\nrecent_talks[\"speaker\"].value_counts().head()\nrecent_talks[\"above_recent_median\"].value_counts()\n\nReductions turn many values into one summary.\nvalue_counts() summarizes repeated categories.\nGrouped summaries come in the next pandas lesson.\n\n\nPlanned time: 2 minutes.\nConnect reductions back to NumPy. Keep groupby() out of today’s syntax so the next lesson can motivate split, apply, and combine properly."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#named-steps-expose-the-reasoning",
+    "href": "slides/pandas-foundations.html#named-steps-expose-the-reasoning",
+    "title": "pandas",
+    "section": "Named steps expose the reasoning",
+    "text": "Named steps expose the reasoning\nmask = talks[\"year\"].between(2018, 2020)\n\ncolumns = [\n    \"talk_name\", \"speaker\", \"conference\", \"num_words\"\n]\n\nrecent = talks.loc[mask, columns]\n\nanswer = recent.sort_values(\n    \"num_words\", ascending=False\n).head(5)\n\nPlanned time: 2 minutes.\nRecommend named steps while students are learning and debugging. Each name gives them a checkpoint where they can inspect shape and content."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-same-logic-as-a-chain",
+    "href": "slides/pandas-foundations.html#the-same-logic-as-a-chain",
+    "title": "pandas",
+    "section": "The same logic as a chain",
+    "text": "The same logic as a chain\nanswer = (\n    talks.loc[\n        talks[\"year\"].between(2018, 2020),\n        [\"talk_name\", \"speaker\", \"conference\", \"num_words\"]\n    ]\n    .sort_values(\"num_words\", ascending=False)\n    .head(5)\n)\n\nRead the chain from top to bottom as a sequence of table operations.\n\n\nPlanned time: 2 minutes.\nStudents should be able to read this chain today. They do not need to prefer it over named intermediate objects yet."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#translate-the-request-into-pandas",
+    "href": "slides/pandas-foundations.html#translate-the-request-into-pandas",
+    "title": "pandas",
+    "section": "Translate the request into pandas",
+    "text": "Translate the request into pandas\n\nFind Sunday morning talks from 2019 or 2020 with 1,400 through 1,700 words. Keep the title, speaker, conference, year, and word count. Put newer years first, then longer talks within each year.\n\nWith a partner, identify:\n\nthe row conditions\nthe selected columns\nthe ordering columns and directions\none result check\n\n\nPlanned time: 4 minutes.\nGive pairs two minutes. Ask them to explain the operation sequence before writing exact syntax. A useful check is that every returned row should have a Sunday morning session, an allowed year, and a word count inside the inclusive range."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#a-defensible-translation",
+    "href": "slides/pandas-foundations.html#a-defensible-translation",
+    "title": "pandas",
+    "section": "A defensible translation",
+    "text": "A defensible translation\nmask = (\n    talks[\"year\"].between(2019, 2020)\n    & (talks[\"session\"] == \"sunday-morning\")\n    & talks[\"num_words\"].between(1400, 1700)\n)\n\nselected = talks.loc[\n    mask,\n    [\"talk_name\", \"speaker\", \"conference\", \"year\", \"num_words\"]\n]\n\nresult = selected.sort_values(\n    [\"year\", \"num_words\"],\n    ascending=[False, False]\n)\n\nPlanned time: 2 minutes.\nUse this as the immediate summary. Point to the one-to-one relationship between the prose request and each part of the code."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#repository-activity",
+    "href": "slides/pandas-foundations.html#repository-activity",
+    "title": "pandas",
+    "section": "Repository activity",
+    "text": "Repository activity\n\nFork stat-386-pandas-foundations on GitHub.\nClone your fork.\nCreate the environment.\n\ngit clone https://github.com/YOUR-USERNAME/stat-386-pandas-foundations.git\ncd stat-386-pandas-foundations\nuv sync\nOpen activity/pandas-foundations.qmd.\n\nPlanned time: 3 minutes.\nReplace the placeholder URL after uploading the repository. The completed version is activity/pandas-foundations-complete.qmd. Ask students to begin with the starter file."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#activity-checkpoints",
+    "href": "slides/pandas-foundations.html#activity-checkpoints",
+    "title": "pandas",
+    "section": "Activity checkpoints",
+    "text": "Activity checkpoints\n\nInspect the table and state what one row represents.\nPredict whether each selection returns a Series or DataFrame.\nBuild and inspect one Boolean mask.\nFilter and select columns with .loc[].\nSort by one column, then by two columns.\nComplete the Sunday morning request.\n\n\nPlanned time: 10 to 15 minutes.\nPause after checkpoints 2, 3, and 5. Ask students to compare types, shapes, and row counts. If class time is short, complete the first three checkpoints together and release students for the final request."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#the-activity-result",
+    "href": "slides/pandas-foundations.html#the-activity-result",
+    "title": "pandas",
+    "section": "The activity result",
+    "text": "The activity result\n\n\n\n\n\n\n\n\n\n\ntalk_name\nspeaker\nconference\nyear\nnum_words\n\n\n\n\nI Believe in Angels\nCarlos A. Godoy\nOctober 2020\n2020\n1508\n\n\nThat They May See\nBonnie H. Cordon\nApril 2020\n2020\n1456\n\n\nPeace, Be Still\nLisa L. Harkness\nOctober 2020\n2020\n1411\n\n\nChrist: The Light That Shines in Darkness\nSharon Eubank\nApril 2019\n2019\n1652\n\n\nFinding Joy in Sharing the Gospel\nCristina B. Franco\nOctober 2019\n2019\n1517\n\n\nThe Savior’s Touch\nWalter F. González\nOctober 2019\n2019\n1487\n\n\n\n\nHow can you verify the filtering and ordering without rereading the code?\n\n\nPlanned time: 3 minutes.\nReveal this only after students finish or during the debrief. The year and word-count patterns provide visible checks. There should be six rows."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#what-pandas-contributed",
+    "href": "slides/pandas-foundations.html#what-pandas-contributed",
+    "title": "pandas",
+    "section": "What pandas contributed",
+    "text": "What pandas contributed\n\nLabels kept variables connected to their meanings.\nA Boolean Series made one filtering decision per talk.\n.loc[] selected rows and columns together.\nsort_values() expressed priority and tie-breaking.\nVectorized expressions created values for every row.\n\n\nPlanned time: 2 minutes.\nAsk students to name the operation that served each part of the activity request before revealing the bullets."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#exit-check",
+    "href": "slides/pandas-foundations.html#exit-check",
+    "title": "pandas",
+    "section": "Exit check",
+    "text": "Exit check\nFor each line, predict the result type or meaning:\ntalks[\"speaker\"]\n\ntalks[[\"speaker\"]]\n\ntalks.loc[talks[\"year\"] == 2020, [\"speaker\", \"talk_name\"]]\n\ntalks.sort_values(\n    [\"year\", \"num_words\"],\n    ascending=[True, False]\n)\n\nPlanned time: 3 minutes.\nExpected responses: Series, one-column DataFrame, a two-column DataFrame containing 2020 talks, and a DataFrame ordered from earlier to later years with larger word counts first within each year."
+  },
+  {
+    "objectID": "slides/pandas-foundations.html#pandas-organizing-idea",
+    "href": "slides/pandas-foundations.html#pandas-organizing-idea",
+    "title": "pandas",
+    "section": "pandas’ organizing idea",
+    "text": "pandas’ organizing idea\n\nA DataFrame keeps values connected to labels, and a clear analysis translates a question into inspectable table operations.\n\n\nKnow what one row represents.\nPredict the type and shape of each intermediate result.\nCheck that the final rows and columns answer the original question.\n\n\nPlanned time: 1 minute.\nEnd with the reasoning habit rather than a list of methods. The next lesson can build on this foundation by asking how to summarize separate groups of rows."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "STAT 386: pandas Foundations",
+    "section": "",
+    "text": "Class materials for the STAT 386 pandas foundations lesson. The class moves from inspecting a DataFrame to selection, Boolean masks, and multi-column sorting on the General Conference talks dataset.\n\nLecture slides\nIn-class activity\nCompleted activity\nGitHub Repo with code"
+  },
+  {
+    "objectID": "activity/pandas-foundations.html",
+    "href": "activity/pandas-foundations.html",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "",
+    "text": "This activity practices a small set of pandas operations on the same General Conference dataset used in Lab 3. At each checkpoint, predict the type, shape, or contents of the result before running the code.\nYou will practice:\n\ninspecting a DataFrame\ndistinguishing a Series from a DataFrame\nselecting labeled rows and columns\nbuilding Boolean masks\nsorting by one or more columns\ntranslating a written request into pandas code."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#purpose",
+    "href": "activity/pandas-foundations.html#purpose",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "",
+    "text": "This activity practices a small set of pandas operations on the same General Conference dataset used in Lab 3. At each checkpoint, predict the type, shape, or contents of the result before running the code.\nYou will practice:\n\ninspecting a DataFrame\ndistinguishing a Series from a DataFrame\nselecting labeled rows and columns\nbuilding Boolean masks\nsorting by one or more columns\ntranslating a written request into pandas code."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#setup",
+    "href": "activity/pandas-foundations.html#setup",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Setup",
+    "text": "Setup\n\nimport pandas as pd\n\ntalks = pd.read_csv(\"../data/talks.csv\")"
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-1-understand-the-table",
+    "href": "activity/pandas-foundations.html#checkpoint-1-understand-the-table",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 1: Understand the table",
+    "text": "Checkpoint 1: Understand the table\nDisplay the first five rows using only these columns:\n\ntalk_name\nspeaker\nconference\nnum_words\n\n\n# TODO: Select the four columns and display the first five rows.\n\nDetermine the shape of the complete talks DataFrame.\n\n# TODO: Display the shape.\n\nBefore continuing: What does one row represent? What does each number in the shape mean?"
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-2-predict-the-object",
+    "href": "activity/pandas-foundations.html#checkpoint-2-predict-the-object",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 2: Predict the object",
+    "text": "Checkpoint 2: Predict the object\nBefore running the following cells, predict whether each result will be a Series or DataFrame and predict its shape.\n\n# TODO: Select num_words with one column label.\n\n\n# TODO: Select num_words using a list containing one column label.\n\n\n# TODO: Select talk_name, speaker, and num_words as a DataFrame.\n\nUse type() and .shape to check each prediction."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-3-build-a-mask",
+    "href": "activity/pandas-foundations.html#checkpoint-3-build-a-mask",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 3: Build a mask",
+    "text": "Checkpoint 3: Build a mask\nCreate a Boolean Series named recent_mask that identifies talks from 2018 through 2020, inclusive.\n\n# TODO: Create recent_mask.\n\nInspect the first five values, check its shape, and count how many values are True.\n\n# TODO: Inspect and summarize recent_mask.\n\nBefore continuing: What does one True value mean? Why should the mask have the same number of entries as talks has rows?"
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-4-filter-and-select-together",
+    "href": "activity/pandas-foundations.html#checkpoint-4-filter-and-select-together",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 4: Filter and select together",
+    "text": "Checkpoint 4: Filter and select together\nUse .loc[] to create recent_talks. Keep rows identified by recent_mask and only these columns:\n\ntalk_name\nspeaker\nconference\nyear\nnum_words\n\n\n# TODO: Create recent_talks with .loc[].\n\nCheck its shape and display the first five rows.\n\n# TODO: Check recent_talks."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-5-sort-the-qualifying-rows",
+    "href": "activity/pandas-foundations.html#checkpoint-5-sort-the-qualifying-rows",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 5: Sort the qualifying rows",
+    "text": "Checkpoint 5: Sort the qualifying rows\nSort recent_talks from the largest to the smallest word count. Display the first five rows.\n\n# TODO: Sort by num_words and keep the first five rows.\n\nNow sort all of recent_talks using these priorities:\n\nnewer years first\nwithin each year, larger word counts first.\n\n\n# TODO: Sort by year and num_words with separate directions.\n\nBefore continuing: Why can a 2019 talk with more words appear below a shorter 2020 talk in the second result?"
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#checkpoint-6-create-a-variable",
+    "href": "activity/pandas-foundations.html#checkpoint-6-create-a-variable",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Checkpoint 6: Create a variable",
+    "text": "Checkpoint 6: Create a variable\nCalculate the median word count among recent_talks. Then create a Boolean column named above_recent_median that identifies talks above that median.\n\n# TODO: Calculate recent_median.\n# TODO: Create above_recent_median.\n\nCount the True and False values.\n\n# TODO: Count the two categories."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#final-request",
+    "href": "activity/pandas-foundations.html#final-request",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Final request",
+    "text": "Final request\n\nFind Sunday morning talks from 2019 or 2020 with 1,400 through 1,700 words. Keep the title, speaker, conference, year, and word count. Put newer years first, then longer talks within each year.\n\n\n1. Build the row condition\nCreate a Boolean Series named request_mask. Combine all three conditions using & and parentheses.\n\n# TODO: Create request_mask.\n\n\n\n2. Select rows and columns\nCreate a DataFrame named selected using .loc[].\n\n# TODO: Create selected.\n\n\n\n3. Apply the requested ordering\nCreate result by sorting on two columns with two descending directions.\n\n# TODO: Create and display result.\n\n\n\n4. Check the result\nWrite at least two checks that support the claim that result answers the request. One check should use code and one should use the visible table.\n\n# TODO: Add a code-based check.\n\nVisible check: Replace this sentence with your check."
+  },
+  {
+    "objectID": "activity/pandas-foundations.html#reflection",
+    "href": "activity/pandas-foundations.html#reflection",
+    "title": "pandas Foundations: In-Class Activity",
+    "section": "Reflection",
+    "text": "Reflection\nIn two or three sentences, describe how the written request determined:\n\nthe Boolean mask\nthe selected columns\nthe sorting columns and directions."
+  }
+]

@@ -10,3 +10,7 @@ _freeze/
 
 /.quarto/
 **/*.quarto_ipynb
+
+# GitHub Pages serves the published site from docs/
+!docs/
+!docs/**

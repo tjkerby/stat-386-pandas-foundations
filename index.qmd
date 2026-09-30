@@ -1,0 +1,12 @@
+---
+title: "STAT 386: pandas Foundations"
+---
+
+Class materials for the STAT 386 pandas foundations lesson. The class moves
+from inspecting a DataFrame to selection, Boolean masks, and multi-column
+sorting on the General Conference talks dataset.
+
+- [Lecture slides](slides/pandas-foundations.qmd)
+- [In-class activity](activity/pandas-foundations.qmd)
+- [Completed activity](activity/pandas-foundations-complete.qmd)
+- [GitHub Repo with code](https://github.com/tjkerby/stat-386-pandas-foundations)

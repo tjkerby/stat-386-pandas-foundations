@@ -1,7 +1,28 @@
 project:
-  type: default
-  execute-dir: project
+  type: website
+  output-dir: docs
+  # Rendered-site sources only. The activity .ipynb files are interactive
+  # working copies, and the instructor guide is repo documentation.
+  render:
+    - index.qmd
+    - slides/pandas-foundations.qmd
+    - activity/pandas-foundations.qmd
+    - activity/pandas-foundations-complete.qmd
+  # The materials use paths relative to their own file (e.g. ../data/talks.csv),
+  # so execute each document from its own directory, not the project root.
+  execute-dir: file
+
+website:
+  title: "STAT 386: pandas Foundations"
+  site-url: "https://tjkerby.github.io/stat-386-pandas-foundations/"
+  navbar:
+    left:
+      - href: slides/pandas-foundations.qmd
+        text: Slides
+      - href: activity/pandas-foundations.qmd
+        text: Activity
+      - href: activity/pandas-foundations-complete.qmd
+        text: Activity (Completed)
 
 execute:
   freeze: auto
-
