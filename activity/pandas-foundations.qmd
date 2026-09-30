@@ -1,0 +1,204 @@
+---
+title: "pandas Foundations: In-Class Activity"
+author: "STAT 386"
+format:
+  html:
+    toc: true
+    embed-resources: true
+    code-fold: false
+execute:
+  echo: true
+  warning: true
+jupyter: python3
+---
+
+## Purpose
+
+This activity practices a small set of pandas operations on the same General
+Conference dataset used in Lab 3. At each checkpoint, predict the type, shape,
+or contents of the result before running the code.
+
+You will practice:
+
+- inspecting a DataFrame
+- distinguishing a Series from a DataFrame
+- selecting labeled rows and columns
+- building Boolean masks
+- sorting by one or more columns
+- translating a written request into pandas code.
+
+## Setup
+
+```{python}
+import pandas as pd
+
+talks = pd.read_csv("../data/talks.csv")
+```
+
+## Checkpoint 1: Understand the table
+
+Display the first five rows using only these columns:
+
+- `talk_name`
+- `speaker`
+- `conference`
+- `num_words`
+
+```{python}
+# TODO: Select the four columns and display the first five rows.
+```
+
+Determine the shape of the complete `talks` DataFrame.
+
+```{python}
+# TODO: Display the shape.
+```
+
+**Before continuing:** What does one row represent? What does each number in
+the shape mean?
+
+## Checkpoint 2: Predict the object
+
+Before running the following cells, predict whether each result will be a
+Series or DataFrame and predict its shape.
+
+```{python}
+# TODO: Select num_words with one column label.
+```
+
+```{python}
+# TODO: Select num_words using a list containing one column label.
+```
+
+```{python}
+# TODO: Select talk_name, speaker, and num_words as a DataFrame.
+```
+
+Use `type()` and `.shape` to check each prediction.
+
+## Checkpoint 3: Build a mask
+
+Create a Boolean Series named `recent_mask` that identifies talks from 2018
+through 2020, inclusive.
+
+```{python}
+# TODO: Create recent_mask.
+```
+
+Inspect the first five values, check its shape, and count how many values are
+`True`.
+
+```{python}
+# TODO: Inspect and summarize recent_mask.
+```
+
+**Before continuing:** What does one `True` value mean? Why should the mask
+have the same number of entries as `talks` has rows?
+
+## Checkpoint 4: Filter and select together
+
+Use `.loc[]` to create `recent_talks`. Keep rows identified by `recent_mask`
+and only these columns:
+
+- `talk_name`
+- `speaker`
+- `conference`
+- `year`
+- `num_words`
+
+```{python}
+# TODO: Create recent_talks with .loc[].
+```
+
+Check its shape and display the first five rows.
+
+```{python}
+# TODO: Check recent_talks.
+```
+
+## Checkpoint 5: Sort the qualifying rows
+
+Sort `recent_talks` from the largest to the smallest word count. Display the
+first five rows.
+
+```{python}
+# TODO: Sort by num_words and keep the first five rows.
+```
+
+Now sort all of `recent_talks` using these priorities:
+
+1. newer years first
+2. within each year, larger word counts first.
+
+```{python}
+# TODO: Sort by year and num_words with separate directions.
+```
+
+**Before continuing:** Why can a 2019 talk with more words appear below a
+shorter 2020 talk in the second result?
+
+## Checkpoint 6: Create a variable
+
+Calculate the median word count among `recent_talks`. Then create a Boolean
+column named `above_recent_median` that identifies talks above that median.
+
+```{python}
+# TODO: Calculate recent_median.
+# TODO: Create above_recent_median.
+```
+
+Count the `True` and `False` values.
+
+```{python}
+# TODO: Count the two categories.
+```
+
+## Final request
+
+> Find Sunday morning talks from 2019 or 2020 with 1,400 through 1,700 words.
+> Keep the title, speaker, conference, year, and word count. Put newer years
+> first, then longer talks within each year.
+
+### 1. Build the row condition
+
+Create a Boolean Series named `request_mask`. Combine all three conditions
+using `&` and parentheses.
+
+```{python}
+# TODO: Create request_mask.
+```
+
+### 2. Select rows and columns
+
+Create a DataFrame named `selected` using `.loc[]`.
+
+```{python}
+# TODO: Create selected.
+```
+
+### 3. Apply the requested ordering
+
+Create `result` by sorting on two columns with two descending directions.
+
+```{python}
+# TODO: Create and display result.
+```
+
+### 4. Check the result
+
+Write at least two checks that support the claim that `result` answers the
+request. One check should use code and one should use the visible table.
+
+```{python}
+# TODO: Add a code-based check.
+```
+
+**Visible check:** Replace this sentence with your check.
+
+## Reflection
+
+In two or three sentences, describe how the written request determined:
+
+- the Boolean mask
+- the selected columns
+- the sorting columns and directions.

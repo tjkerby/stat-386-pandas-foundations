@@ -1,0 +1,175 @@
+---
+title: "pandas Foundations: Completed Activity"
+author: "STAT 386"
+format:
+  html:
+    toc: true
+    embed-resources: true
+    code-fold: false
+execute:
+  echo: true
+  warning: true
+jupyter: python3
+---
+
+## Purpose
+
+This file contains one completed version of the in-class activity. Equivalent
+code can also be correct when it produces the same well-checked result.
+
+## Setup
+
+```{python}
+import pandas as pd
+
+talks = pd.read_csv("../data/talks.csv")
+```
+
+## Checkpoint 1: Understand the table
+
+```{python}
+talks[["talk_name", "speaker", "conference", "num_words"]].head()
+```
+
+```{python}
+talks.shape
+```
+
+Each row represents one General Conference talk. The shape `(794, 14)` means
+that the table contains 794 observed talks and 14 recorded variables.
+
+## Checkpoint 2: Predict the object
+
+```{python}
+one_series = talks["num_words"]
+type(one_series), one_series.shape
+```
+
+```{python}
+one_column_frame = talks[["num_words"]]
+type(one_column_frame), one_column_frame.shape
+```
+
+```{python}
+three_column_frame = talks[["talk_name", "speaker", "num_words"]]
+type(three_column_frame), three_column_frame.shape
+```
+
+The first selection returns a Series with shape `(794,)`. The other two
+selections return DataFrames with shapes `(794, 1)` and `(794, 3)`.
+
+## Checkpoint 3: Build a mask
+
+```{python}
+recent_mask = talks["year"].between(2018, 2020)
+```
+
+```{python}
+recent_mask.head(), recent_mask.shape, recent_mask.sum()
+```
+
+One `True` means that the corresponding talk occurred from 2018 through 2020.
+The mask has 794 entries because it makes one decision for each row.
+
+## Checkpoint 4: Filter and select together
+
+```{python}
+recent_talks = talks.loc[
+    recent_mask,
+    ["talk_name", "speaker", "conference", "year", "num_words"]
+].copy()
+```
+
+```{python}
+recent_talks.shape, recent_talks.head()
+```
+
+## Checkpoint 5: Sort the qualifying rows
+
+```{python}
+recent_talks.sort_values("num_words", ascending=False).head()
+```
+
+```{python}
+recent_talks.sort_values(
+    ["year", "num_words"],
+    ascending=[False, False]
+).head(10)
+```
+
+Year has priority in the second result. Every 2020 talk appears before every
+2019 talk, even when a 2019 talk has a larger word count.
+
+## Checkpoint 6: Create a variable
+
+```{python}
+recent_median = recent_talks["num_words"].median()
+
+recent_talks["above_recent_median"] = (
+    recent_talks["num_words"] > recent_median
+)
+
+recent_median
+```
+
+```{python}
+recent_talks["above_recent_median"].value_counts()
+```
+
+## Final request
+
+### 1. Build the row condition
+
+```{python}
+request_mask = (
+    talks["year"].between(2019, 2020)
+    & (talks["session"] == "sunday-morning")
+    & talks["num_words"].between(1400, 1700)
+)
+```
+
+### 2. Select rows and columns
+
+```{python}
+selected = talks.loc[
+    request_mask,
+    ["talk_name", "speaker", "conference", "year", "num_words"]
+]
+```
+
+### 3. Apply the requested ordering
+
+```{python}
+result = selected.sort_values(
+    ["year", "num_words"],
+    ascending=[False, False]
+)
+
+result
+```
+
+### 4. Check the result
+
+```{python}
+checks = {
+    "six_rows": len(result) == 6,
+    "allowed_years": result["year"].isin([2019, 2020]).all(),
+    "word_range": result["num_words"].between(1400, 1700).all(),
+    "all_sunday_morning": talks.loc[result.index, "session"].eq(
+        "sunday-morning"
+    ).all(),
+}
+
+checks
+```
+
+The visible table places all 2020 talks above the 2019 talks. Within each year,
+the word counts decrease from top to bottom.
+
+## Reflection
+
+The written request supplies three row conditions, five output columns, and two
+sorting priorities. The code preserves that structure: the mask defines which
+talks qualify, `.loc[]` retains the requested fields, and `sort_values()` puts
+year ahead of word count when ordering the result.
+

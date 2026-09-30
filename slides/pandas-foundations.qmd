@@ -1,0 +1,1071 @@
+---
+title: "pandas"
+subtitle: "Thinking in labeled tables"
+author: "STAT 386"
+date: "September 30, 2026"
+format:
+  revealjs:
+    theme: [default, theme.scss]
+    width: 1600
+    height: 900
+    margin: 0.055
+    slide-number: c/t
+    show-slide-number: all
+    transition: fade
+    background-transition: fade
+    controls: true
+    controls-layout: bottom-right
+    progress: true
+    hash: true
+    center: false
+    incremental: false
+    code-copy: true
+    code-overflow: wrap
+    chalkboard: true
+    preview-links: auto
+    footer: "STAT 386: pandas foundations"
+execute:
+  enabled: false
+---
+
+## A request about 794 talks
+
+You receive a table with 794 General Conference talks and 14 variables.
+
+> Find the five talks from 2018 through 2020 with the largest word counts. Show the title, speaker, conference, and word count.
+
+::: {.question}
+What must your code do before you can answer?
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Read the request without showing code. Ask students to name the decisions hidden inside it. Listen for understanding rows and columns, filtering years, choosing columns, sorting, and keeping five rows.
+:::
+
+## Think, pair, share
+
+::: {.incremental .operation-list}
+1. What does one row need to represent?
+2. Which variables matter for the request?
+3. Which observations qualify?
+4. How should the qualifying rows be ordered?
+5. What would you check before reporting the answer?
+:::
+
+::: {.notes}
+Planned time: 4 minutes.
+
+Give students about 45 seconds to think and 90 seconds to compare. During the share, collect one answer for each question. Keep the discussion at the level of table operations rather than pandas syntax.
+:::
+
+## A data question becomes table operations
+
+::: {.incremental}
+- **Understand:** identify the observational unit and variables.
+- **Select:** keep the columns needed for the answer.
+- **Filter:** keep the rows that satisfy the conditions.
+- **Order:** arrange the rows so the requested cases come first.
+- **Check:** confirm the shape and meaning of the result.
+:::
+
+::: {.fragment .takeaway}
+pandas gives these operations a vocabulary.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Use this as the debrief for the discussion. The five verbs organize the rest of the lecture. Point out that the order of selecting and filtering can vary, but every operation should serve the question.
+:::
+
+## Today’s problem
+
+> How can we translate a question about tabular data into explicit operations on labeled rows and columns?
+
+By the end of class, you should be able to reason about:
+
+::: {.incremental}
+- Series and DataFrames
+- labels, positions, and alignment
+- selecting and filtering observations
+- sorting by one or more variables
+- vectorized variables and simple summaries
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+This is the roadmap. Tell students that the opening request will return in the repository activity.
+:::
+
+## The NumPy array from last class
+
+```python
+scores = np.array([
+    [82, 91, 88],
+    [75, 84, 79],
+    [93, 89, 95],
+    [68, 72, 74]
+])
+```
+
+::: {.incremental}
+- Shape tells us there are four rows and three columns.
+- Position tells us where each value lives.
+- We must remember what each row and column means.
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+This should feel completely familiar. Ask what one row and one column represent before advancing.
+:::
+
+## The same values with labels
+
+```python
+score_df = pd.DataFrame(
+    scores,
+    index=["Ana", "Bo", "Cam", "Dev"],
+    columns=["exam_1", "exam_2", "exam_3"]
+)
+```
+
+::: {.score-table}
+| student | exam_1 | exam_2 | exam_3 |
+|:--|--:|--:|--:|
+| Ana | 82 | 91 | 88 |
+| Bo | 75 | 84 | 79 |
+| Cam | 93 | 89 | 95 |
+| Dev | 68 | 72 | 74 |
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The values have not changed. The table now carries names for both axes. Explain that the leftmost student labels form the index and the exam names label columns.
+:::
+
+## What pandas adds
+
+::: {.incremental}
+- Row and column labels carry meaning into the code.
+- Each column can have its own data type.
+- Labels support selection and automatic alignment.
+- Table methods express common data tasks directly.
+:::
+
+::: {.fragment .takeaway}
+Shape, vectorization, and Boolean masks still matter.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Keep the NumPy connection strong without claiming that every modern pandas column must use an ordinary NumPy array internally. pandas can use additional storage types.
+
+Source: https://pandas.pydata.org/docs/user_guide/dsintro.html
+:::
+
+## Two core objects
+
+:::: {.columns}
+::: {.column width="47%"}
+### Series
+
+One labeled sequence of values
+
+```python
+score_df["exam_1"]
+```
+
+<span class="series-label">One dimension</span>
+:::
+
+::: {.column width="47%"}
+### DataFrame
+
+Labeled rows and columns
+
+```python
+score_df[["exam_1", "exam_3"]]
+```
+
+<span class="dataframe-label">Two dimensions</span>
+:::
+::::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Describe a DataFrame as a collection of aligned Series. The single bracket and double bracket distinction will return later with visible results.
+:::
+
+## Labels participate in computation
+
+```python
+first_exam = pd.Series(
+    [82, 75], index=["Ana", "Bo"]
+)
+
+bonus = pd.Series(
+    [5, 2], index=["Bo", "Ana"]
+)
+```
+
+::: {.question}
+What should `first_exam + bonus` return?
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+Ask students to predict before revealing the result. NumPy-style positional addition would suggest 87 and 77. pandas uses the labels.
+:::
+
+## pandas aligns matching labels
+
+```python
+first_exam + bonus
+```
+
+::: {.fragment .output}
+```text
+Ana    84
+Bo     80
+dtype: int64
+```
+:::
+
+::: {.fragment .takeaway}
+Ana receives Ana’s bonus even though the Series use different orders.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Read the calculation for each student. Label alignment prevents values from silently changing meaning when their order differs. Mention that missing labels introduce missing results, but leave missingness for its dedicated lesson.
+
+Source: https://pandas.pydata.org/docs/user_guide/dsintro.html
+:::
+
+## The bridge from NumPy
+
+| NumPy idea | pandas continuation |
+|:--|:--|
+| shape and axes | rows and columns with labels |
+| one array `dtype` | one `dtype` per Series |
+| positional indexing | label and position indexing |
+| Boolean arrays | aligned Boolean Series |
+| vectorized operations | column expressions |
+
+::: {.notes}
+Planned time: 1 minute.
+
+This is the conceptual summary of the bridge. Avoid spending time converting repeatedly between NumPy and pandas.
+:::
+
+## Meet the talks table
+
+```python
+import pandas as pd
+
+talks = pd.read_csv("data/talks.csv")
+```
+
+::: {.incremental}
+- 794 rows
+- 14 columns
+- Conferences from 2010 through 2020
+:::
+
+::: {.question}
+What should one row represent?
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+Loading is setup rather than the focus today. Students will examine file interpretation more deeply in the importing and loading lesson.
+:::
+
+## The observational unit
+
+::: {.takeaway}
+Each row represents one General Conference talk.
+:::
+
+Columns describe that talk, including:
+
+::: {.incremental}
+- its title and speaker
+- its conference and session
+- its word count and runtime
+- its source link and short summary
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Ask how the analysis would change if one row represented a speaker or a conference instead. The row definition constrains what each operation means.
+:::
+
+## Inspect before analyzing
+
+```python
+talks.head()
+talks.shape
+talks.columns
+talks.dtypes
+talks.info()
+```
+
+::: {.incremental}
+- Do the rows match the expected observational unit?
+- Did the expected columns arrive?
+- Do the data types match the variables’ meanings?
+- Does the size seem plausible?
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Present these as evidence checks rather than a memorized inspection ritual. Ask what each command can reveal and what it cannot reveal.
+:::
+
+## A readable first look {.smaller}
+
+```python
+talks[[
+    "talk_name", "speaker", "conference", "num_words"
+]].head()
+```
+
+| talk_name | speaker | conference | num_words |
+|:--|:--|:--|--:|
+| Finding Joy in Christ | Steven J. Lund | October 2020 | 1514 |
+| The Culture of Christ | William K. Jackson | October 2020 | 1500 |
+| Let Patience Have Her Perfect Work, and Count It All Joy! | Jeremy R. Jaggi | October 2020 | 1492 |
+| Ask, Seek, and Knock | Milton Camargo | October 2020 | 1484 |
+| Enduring Power | Kelly R. Johnson | October 2020 | 1430 |
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The full DataFrame is too wide for a useful display. Selecting a few meaningful columns is part of inspection, not manipulation for its own sake.
+:::
+
+## Shape has a substantive meaning
+
+```python
+talks.shape
+```
+
+::: {.fragment .output}
+```text
+(794, 14)
+```
+:::
+
+::: {.incremental}
+- 794 observed talks
+- 14 recorded variables for each talk
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+Connect this directly to the NumPy shape lesson. Students should state the substantive meaning before treating shape as a tuple to memorize.
+:::
+
+## Data types belong to columns
+
+```python
+talks[["talk_name", "year", "num_words"]].dtypes
+```
+
+::: {.fragment .output}
+```text
+talk_name       object
+year             int64
+num_words        int64
+dtype: object
+```
+:::
+
+::: {.question}
+Which calculations make sense for each column?
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The word `object` is what this dataset reports for text under its current import settings. Do not generalize that all pandas text columns must always use `object`.
+:::
+
+## Selecting one column
+
+```python
+word_counts = talks["num_words"]
+
+type(word_counts)
+word_counts.shape
+```
+
+::: {.fragment .output}
+```text
+pandas.Series
+(794,)
+```
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+A single column label returns a Series. Connect the one-dimensional shape to the prior NumPy indexing discussion.
+:::
+
+## Selecting columns as a DataFrame
+
+```python
+small_talks = talks[[
+    "talk_name", "speaker", "num_words"
+]]
+
+type(small_talks)
+small_talks.shape
+```
+
+::: {.fragment .output}
+```text
+pandas.DataFrame
+(794, 3)
+```
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+The outer brackets perform the DataFrame selection. The inner brackets create a Python list of column labels.
+:::
+
+## Single and double brackets
+
+:::: {.columns}
+::: {.column width="47%"}
+### Series result
+
+```python
+talks["num_words"]
+```
+
+Shape: `(794,)`
+:::
+
+::: {.column width="47%"}
+### DataFrame result
+
+```python
+talks[["num_words"]]
+```
+
+Shape: `(794, 1)`
+:::
+::::
+
+::: {.takeaway}
+The values can match while the object structure differs.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Ask why the DataFrame version could be useful. It preserves a two-dimensional table and makes it easy to add more selected columns.
+:::
+
+## Labels and positions
+
+```python
+df.loc[row_labels, column_labels]
+df.iloc[row_positions, column_positions]
+```
+
+| Selector | Interprets `1` as | Best when |
+|:--|:--|:--|
+| `.loc[]` | an index label | meaning and conditions matter |
+| `.iloc[]` | the second position | physical position matters |
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Say `loc` as label location and `iloc` as integer location. A numeric index label can make the distinction less visible, which is why the score table uses names.
+
+Source: https://pandas.pydata.org/docs/user_guide/indexing.html
+:::
+
+## One selection in two languages
+
+```python
+score_df.loc[
+    ["Bo", "Cam"],
+    ["exam_1", "exam_3"]
+]
+```
+
+```python
+score_df.iloc[
+    [1, 2],
+    [0, 2]
+]
+```
+
+::: {.fragment .score-table}
+| student | exam_1 | exam_3 |
+|:--|--:|--:|
+| Bo | 75 | 79 |
+| Cam | 93 | 95 |
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The two expressions return the same values for the current table. Ask which expression would remain meaningful if the row order changed. The label-based selection is more closely tied to the substantive request.
+:::
+
+## Predict the result
+
+Starting from the four-row score DataFrame, predict the object type, shape, and contents of:
+
+::: {.incremental}
+1. `score_df["exam_1"]`
+2. `score_df[["exam_1"]]`
+3. `score_df.loc[["Ana", "Cam"], ["exam_2"]]`
+4. `score_df.iloc[:2, 1:]`
+:::
+
+::: {.notes}
+Planned time: 4 minutes.
+
+Give students one minute individually and one minute with a partner. Ask pairs to justify the dimensions rather than only state the values. The expected shapes are `(4,)`, `(4, 1)`, `(2, 1)`, and `(2, 2)`.
+:::
+
+## Selection preserves intended structure
+
+| Expression | Type | Shape |
+|:--|:--|:--|
+| `score_df["exam_1"]` | Series | `(4,)` |
+| `score_df[["exam_1"]]` | DataFrame | `(4, 1)` |
+| `.loc[["Ana", "Cam"], ["exam_2"]]` | DataFrame | `(2, 1)` |
+| `.iloc[:2, 1:]` | DataFrame | `(2, 2)` |
+
+::: {.takeaway}
+Ask what dimensions your selectors preserve or remove.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Use this as the immediate debrief. The goal is to make object shape predictable rather than mysterious.
+:::
+
+## A comparison creates a Boolean Series
+
+```python
+recent_mask = talks["year"].between(2018, 2020)
+
+recent_mask.shape
+recent_mask.sum()
+```
+
+::: {.fragment .output}
+```text
+(794,)
+201
+```
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The mask makes one decision per talk. Ask what `True` means in context. The sum counts `True` values because Boolean values behave as one and zero in this reduction.
+:::
+
+## Read the mask beside the data
+
+::: {.mask-table}
+| year | condition | keep? |
+|--:|:--|:--:|
+| 2020 | `2018 <= 2020 <= 2020` | <span class="mask-true">True</span> |
+| 2019 | `2018 <= 2019 <= 2020` | <span class="mask-true">True</span> |
+| 2017 | `2018 <= 2017 <= 2020` | <span class="mask-false">False</span> |
+| 2018 | `2018 <= 2018 <= 2020` | <span class="mask-true">True</span> |
+| 2016 | `2018 <= 2016 <= 2020` | <span class="mask-false">False</span> |
+:::
+
+::: {.takeaway}
+Filtering begins by making one explicit decision for each row.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Trace each row before showing selection syntax. This repeats the visible kept-versus-dropped approach from the NumPy slides.
+:::
+
+## Apply the mask with `.loc[]`
+
+```python
+recent_talks = talks.loc[
+    recent_mask,
+    ["talk_name", "speaker", "conference", "year", "num_words"]
+]
+```
+
+::: {.incremental}
+- The expression before the comma selects rows.
+- The list after the comma selects columns.
+- The result has 201 rows and 5 columns.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Read the expression aloud as keep rows where the recent mask is true, then keep these five labeled columns. This makes the two-axis structure explicit.
+:::
+
+## Combining conditions
+
+```python
+mask = (
+    talks["year"].between(2019, 2020)
+    & (talks["session"] == "sunday-morning")
+    & talks["num_words"].between(1400, 1700)
+)
+```
+
+::: {.incremental}
+- `&` means elementwise AND.
+- `|` means elementwise OR.
+- `~` reverses a Boolean condition.
+- Parentheses make each comparison explicit.
+:::
+
+::: {.notes}
+Planned time: 3 minutes.
+
+Explain why ordinary Python `and`, `or`, and `not` do not make one decision per row. Do not dwell on operator precedence rules. Teach parentheses as the readable standard.
+:::
+
+## Helpers express common conditions
+
+:::: {.columns}
+::: {.column width="47%"}
+### Inclusive range
+
+```python
+talks["year"].between(2018, 2020)
+```
+:::
+
+::: {.column width="47%"}
+### Set membership
+
+```python
+talks["session"].isin([
+    "sunday-morning",
+    "sunday-afternoon"
+])
+```
+:::
+::::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Show the longer equivalent only verbally if useful. These helpers often express the data question more clearly than a long chain of repeated comparisons.
+:::
+
+## Three filtering mistakes
+
+```python
+# Python asks for one truth value
+condition_1 and condition_2
+
+# The comparisons need parentheses
+talks["year"] >= 2018 & talks["year"] <= 2020
+
+# This assignment targets a temporary result
+talks[talks["year"] >= 2018]["recent"] = True
+```
+
+::: {.fragment .takeaway}
+Use vectorized operators, parenthesized comparisons, and one `.loc[]` assignment.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Do not ask students to memorize warning messages. Emphasize the reliable pattern. With pandas 3 Copy-on-Write, chained assignment never updates the original object.
+
+Sources:
+
+- https://pandas.pydata.org/docs/user_guide/indexing.html
+- https://pandas.pydata.org/docs/user_guide/copy_on_write.html
+:::
+
+## Sorting asks a separate question
+
+Filtering asks:
+
+> Which rows qualify?
+
+Sorting asks:
+
+> In what order should the qualifying rows appear?
+
+```python
+recent_talks.sort_values("num_words")
+```
+
+::: {.fragment .takeaway}
+Ascending order is the default.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Connect sorting to the opening request. The qualifying rows do not change. Only their displayed order changes.
+:::
+
+## Largest values first
+
+```python
+longest_recent = (
+    recent_talks
+    .sort_values("num_words", ascending=False)
+    .head(5)
+)
+```
+
+::: {.incremental}
+- `ascending=False` places larger values first.
+- `head(5)` keeps the first five rows after sorting.
+- `sort_values()` returns a reordered DataFrame.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Ask what would happen if `head(5)` came before sorting. It would return the largest values only by accident. The sequence of operations carries meaning.
+:::
+
+## The five longest recent talks {.smaller}
+
+| talk_name | speaker | conference | num_words |
+|:--|:--|:--|--:|
+| Hear Him | Russell M. Nelson | April 2020 | 2591 |
+| A Home Where the Spirit of the Lord Dwells | Henry B. Eyring | April 2019 | 2247 |
+| Shall We Not Go On in So Great a Cause? | M. Russell Ballard | April 2020 | 2234 |
+| Inspired Ministering | Henry B. Eyring | April 2018 | 2217 |
+| Your Priesthood Playbook | Gary E. Stevenson | April 2019 | 2202 |
+
+::: {.notes}
+Planned time: 1 minute.
+
+Return to the opening request. Confirm that every displayed column serves the request and that the rows are ordered by word count.
+:::
+
+## Multiple columns break ties
+
+```python
+ordered = selected.sort_values(
+    ["year", "num_words"],
+    ascending=[False, False]
+)
+```
+
+::: {.incremental}
+1. Put newer years first.
+2. Within each year, put longer talks first.
+:::
+
+::: {.takeaway}
+The lists pair each column with its ordering direction.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Connect this syntax to SQL `ORDER BY` for students who know it. The first column has priority. The second column decides the order among rows tied on the first.
+:::
+
+## Read a multi-column order {.smaller}
+
+```python
+ascending=[False, False]
+```
+
+| year | num_words | reason for position |
+|--:|--:|:--|
+| 2020 | 1508 | newest year, largest value within 2020 |
+| 2020 | 1456 | newest year, next value within 2020 |
+| 2020 | 1411 | newest year, next value within 2020 |
+| 2019 | 1652 | next year, largest value within 2019 |
+| 2019 | 1517 | next year, next value within 2019 |
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Ask why the 2019 talk with 1,652 words appears below every 2020 talk. Year has priority because it appears first in the sorting list.
+:::
+
+## New columns use vectorized expressions
+
+```python
+recent_talks = talks.loc[recent_mask].copy()
+
+recent_median = recent_talks["num_words"].median()
+
+recent_talks["above_recent_median"] = (
+    recent_talks["num_words"] > recent_median
+)
+```
+
+::: {.fragment .takeaway}
+The comparison produces one new value for every row.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+The explicit copy communicates that `recent_talks` is now an independent working table. pandas 3 Copy-on-Write already prevents edits to this subset from changing `talks`, but the explicit copy also works in earlier versions and remains readable.
+:::
+
+## Simple summaries answer column questions
+
+```python
+recent_talks["num_words"].mean()
+recent_talks["num_words"].median()
+
+recent_talks["speaker"].value_counts().head()
+recent_talks["above_recent_median"].value_counts()
+```
+
+::: {.incremental}
+- Reductions turn many values into one summary.
+- `value_counts()` summarizes repeated categories.
+- Grouped summaries come in the next pandas lesson.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Connect reductions back to NumPy. Keep `groupby()` out of today's syntax so the next lesson can motivate split, apply, and combine properly.
+:::
+
+## Named steps expose the reasoning
+
+```python
+mask = talks["year"].between(2018, 2020)
+
+columns = [
+    "talk_name", "speaker", "conference", "num_words"
+]
+
+recent = talks.loc[mask, columns]
+
+answer = recent.sort_values(
+    "num_words", ascending=False
+).head(5)
+```
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Recommend named steps while students are learning and debugging. Each name gives them a checkpoint where they can inspect shape and content.
+:::
+
+## The same logic as a chain
+
+```python
+answer = (
+    talks.loc[
+        talks["year"].between(2018, 2020),
+        ["talk_name", "speaker", "conference", "num_words"]
+    ]
+    .sort_values("num_words", ascending=False)
+    .head(5)
+)
+```
+
+::: {.takeaway}
+Read the chain from top to bottom as a sequence of table operations.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Students should be able to read this chain today. They do not need to prefer it over named intermediate objects yet.
+:::
+
+## Translate the request into pandas
+
+> Find Sunday morning talks from 2019 or 2020 with 1,400 through 1,700 words. Keep the title, speaker, conference, year, and word count. Put newer years first, then longer talks within each year.
+
+With a partner, identify:
+
+::: {.incremental}
+1. the row conditions
+2. the selected columns
+3. the ordering columns and directions
+4. one result check
+:::
+
+::: {.notes}
+Planned time: 4 minutes.
+
+Give pairs two minutes. Ask them to explain the operation sequence before writing exact syntax. A useful check is that every returned row should have a Sunday morning session, an allowed year, and a word count inside the inclusive range.
+:::
+
+## A defensible translation
+
+```python
+mask = (
+    talks["year"].between(2019, 2020)
+    & (talks["session"] == "sunday-morning")
+    & talks["num_words"].between(1400, 1700)
+)
+
+selected = talks.loc[
+    mask,
+    ["talk_name", "speaker", "conference", "year", "num_words"]
+]
+
+result = selected.sort_values(
+    ["year", "num_words"],
+    ascending=[False, False]
+)
+```
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Use this as the immediate summary. Point to the one-to-one relationship between the prose request and each part of the code.
+:::
+
+## Repository activity
+
+1. Fork `stat-386-pandas-foundations` on GitHub.
+2. Clone your fork.
+3. Create the environment.
+
+```bash
+git clone https://github.com/YOUR-USERNAME/stat-386-pandas-foundations.git
+cd stat-386-pandas-foundations
+uv sync
+```
+
+Open `activity/pandas-foundations.qmd`.
+
+::: {.notes}
+Planned time: 3 minutes.
+
+Replace the placeholder URL after uploading the repository. The completed version is `activity/pandas-foundations-complete.qmd`. Ask students to begin with the starter file.
+:::
+
+## Activity checkpoints
+
+::: {.incremental}
+1. Inspect the table and state what one row represents.
+2. Predict whether each selection returns a Series or DataFrame.
+3. Build and inspect one Boolean mask.
+4. Filter and select columns with `.loc[]`.
+5. Sort by one column, then by two columns.
+6. Complete the Sunday morning request.
+:::
+
+::: {.notes}
+Planned time: 10 to 15 minutes.
+
+Pause after checkpoints 2, 3, and 5. Ask students to compare types, shapes, and row counts. If class time is short, complete the first three checkpoints together and release students for the final request.
+:::
+
+## The activity result {.smaller}
+
+| talk_name | speaker | conference | year | num_words |
+|:--|:--|:--|--:|--:|
+| I Believe in Angels | Carlos A. Godoy | October 2020 | 2020 | 1508 |
+| That They May See | Bonnie H. Cordon | April 2020 | 2020 | 1456 |
+| Peace, Be Still | Lisa L. Harkness | October 2020 | 2020 | 1411 |
+| Christ: The Light That Shines in Darkness | Sharon Eubank | April 2019 | 2019 | 1652 |
+| Finding Joy in Sharing the Gospel | Cristina B. Franco | October 2019 | 2019 | 1517 |
+| The Savior’s Touch | Walter F. González | October 2019 | 2019 | 1487 |
+
+::: {.question}
+How can you verify the filtering and ordering without rereading the code?
+:::
+
+::: {.notes}
+Planned time: 3 minutes.
+
+Reveal this only after students finish or during the debrief. The year and word-count patterns provide visible checks. There should be six rows.
+:::
+
+## What pandas contributed
+
+::: {.incremental}
+- Labels kept variables connected to their meanings.
+- A Boolean Series made one filtering decision per talk.
+- `.loc[]` selected rows and columns together.
+- `sort_values()` expressed priority and tie-breaking.
+- Vectorized expressions created values for every row.
+:::
+
+::: {.notes}
+Planned time: 2 minutes.
+
+Ask students to name the operation that served each part of the activity request before revealing the bullets.
+:::
+
+## Exit check
+
+For each line, predict the result type or meaning:
+
+```python
+talks["speaker"]
+
+talks[["speaker"]]
+
+talks.loc[talks["year"] == 2020, ["speaker", "talk_name"]]
+
+talks.sort_values(
+    ["year", "num_words"],
+    ascending=[True, False]
+)
+```
+
+::: {.notes}
+Planned time: 3 minutes.
+
+Expected responses: Series, one-column DataFrame, a two-column DataFrame containing 2020 talks, and a DataFrame ordered from earlier to later years with larger word counts first within each year.
+:::
+
+## pandas’ organizing idea
+
+::: {.takeaway}
+A DataFrame keeps values connected to labels, and a clear analysis translates a question into inspectable table operations.
+:::
+
+::: {.incremental}
+- Know what one row represents.
+- Predict the type and shape of each intermediate result.
+- Check that the final rows and columns answer the original question.
+:::
+
+::: {.notes}
+Planned time: 1 minute.
+
+End with the reasoning habit rather than a list of methods. The next lesson can build on this foundation by asking how to summarize separate groups of rows.
+:::
